@@ -1,32 +1,32 @@
 % 21-Jul-2014 22:39:43 / en vez de \
-% 16-Apr-2014 17:07:20 Añado la posibilidad de cortar trozos
+% 16-Apr-2014 17:07:20 Aï¿½ado la posibilidad de cortar trozos
 % 21-Mar-2014 09:13:16 Quito lo de ir al siguiente cruce del individuo
-% actual, y ya no hay que pulsar mayúscula.
-% 28-Feb-2014 22:59:18 Lo adapto para marcar errores en la interpolación
-% 09-Feb-2014 21:38:51 Añado la posibilidad de poner (o corregir)
+% actual, y ya no hay que pulsar mayï¿½scula.
+% 28-Feb-2014 22:59:18 Lo adapto para marcar errores en la interpolaciï¿½n
+% 09-Feb-2014 21:38:51 Aï¿½ado la posibilidad de poner (o corregir)
 % centroides
 % 04-Feb-2014 23:50:41 Hago que, si puede, coja mancha2centro de man2pez
-% 15-Jan-2014 16:57:24 Hago que genere automáticamente las trayectorias,
+% 15-Jan-2014 16:57:24 Hago que genere automï¿½ticamente las trayectorias,
 % que pregunte al empezar si hay varios mancha2pez guardados, y que
-% funcione para vídeos con varios platos
+% funcione para vï¿½deos con varios platos
 % 24-Dec-2013 17:54:16 Hago que tome obj de datosegm
-% 12-Dec-2013 17:10:17 Hago que use VideoReader cuando la versión de Matlab
+% 12-Dec-2013 17:10:17 Hago que use VideoReader cuando la versiï¿½n de Matlab
 % es reciente
-% 01-Dec-2013 18:29:09 Hago que pueda iniciarse sin ningún argumento de
+% 01-Dec-2013 18:29:09 Hago que pueda iniciarse sin ningï¿½n argumento de
 % entrada
-% 01-Dec-2013 16:09:41 Mejoras estéticas e intento de mejora de la
-% reproducción automática
-% 11-Sep-2013 12:12:41 Lo preparo para más de 10 peces
-% 11-Sep-2013 11:47:09 Hago que pueda mostrar identidades como números
+% 01-Dec-2013 16:09:41 Mejoras estï¿½ticas e intento de mejora de la
+% reproducciï¿½n automï¿½tica
+% 11-Sep-2013 12:12:41 Lo preparo para mï¿½s de 10 peces
+% 11-Sep-2013 11:47:09 Hago que pueda mostrar identidades como nï¿½meros
 % 06-Sep-2013 16:22:02 Hago que aparezca la barra de herramientas de la
-% figura, para poder hacer zoom. También hago que se pueda meter mancha2pez
-% desde fuera, para seguir con una corrección antigua.
+% figura, para poder hacer zoom. Tambiï¿½n hago que se pueda meter mancha2pez
+% desde fuera, para seguir con una correcciï¿½n antigua.
 % 19-Jun-2013 18:23:37 Cambio el timer por un bucle, con la esperanza de que funcione mejor.
 % 13-Jun-2013 10:14:23 Hago que funcione con el nuevo sistema de archivos encriptados
 % 20-Feb-2013 18:23:22 Cambio de control+numero a click+numero para corregir
 % APE 20 feb 13 Viene de datosegm2muestravideo y datosegm2tracking_manual
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pï¿½rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cientï¿½ficas
 
 function datosegm2muestravideo_nuevo(datosegm,obj)
 
@@ -37,7 +37,7 @@ if ispc
 else
     barra='/';
 end
-
+barra=filesep
 if nargin<1 || isempty(datosegm)
     directorio=ultimodir;
     if ~isempty(directorio) && directorio(end)==barra
@@ -45,7 +45,7 @@ if nargin<1 || isempty(datosegm)
     end
    [nombrearchivo,directorio]=uigetfile('*.*','Select video file',directorio); 
    if isempty(dir(directorio))
-       directorio=[directorio(1:end-1) ' ' directorio(end)]; % Esto hace falta en los vídeos de Pierre, porque se come el último espacio
+       directorio=[directorio(1:end-1) ' ' directorio(end)]; % Esto hace falta en los vï¿½deos de Pierre, porque se come el ï¿½ltimo espacio
    end
    ultimodir(directorio);
    if directorio(end)~=barra
@@ -59,13 +59,21 @@ datos.directorio=directorio;
 lista=dir([directorio 'segm*']);
 
 c_platos=0;
+
 for c=1:length(lista)
-    if lista(c).isdir && ~isempty(dir([directorio lista(c).name '\mancha2pez*.mat']))
+    if lista(c).isdir && ~isempty(dir([directorio lista(c).name barra 'mancha2pez*.mat']))
         c_platos=c_platos+1;
         datos.nombresplatos{c_platos}=lista(c).name(5:end);
     end
 end
 
+c_platos
+if(c_platos==0)
+    
+    datos.nombresplatos{1}='';
+end
+
+%datos.nombresplatos{c_platos}='No idententities';
 
 if nargin<2
     obj=[];
@@ -92,11 +100,11 @@ set(h.figure,'menubar','none','toolbar','figure')
 % datos.colorines=[0 0 0 ; 0 .6 0 ; .5 .2 1; 0 .5 1 ; 1 0 1; .5 1 .5; 1 .5 1; 1 .5 .5 ; 1 .5 0; 0 0 .5; .5 0 0 ];
 
 % colorines=[0 0 0 ; 0 .6 0 ; .5 .2 1; 0 .5 1 ; 1 0 1; .5 1 .5; 1 .5 1; 1 .5 .5 ; 1 .5 0 ];
-% colorines=[0 0 0 ; 0 .6 0 ; .5 1 .5; .5 .2 1; 0 .5 1 ; 1 0 1; 1 .5 1; 1 .5 .5 ; 1 .5 0 ]; % PARA EL VÍDEO DE LOS 3+2 PECES CON ESTRES+EXPERIENCIA
-% colorines=[0 0 0 ; 0 0 1 ; 1 0 0; .2 .2 1 ; .5 .5 1; .7 .7 1; 1 .2 .2; 1 .5 .5 ; 1 .7 .7 ]; % PARA EL VÍDEO DE GRUPOS 1 Y 2 DE CONFLICTO DE JULIÁN
-% colorines=[0 0 0 ; 0 0 1 ; 1 0 0; .2 .2 1 ; 1 .2 .2; 1 .5 .5; .5 .5 1; 1 .7 .7 ; .7 .7 1 ]; % PARA EL VÍDEO DE GRUPOS 3 Y 4 DE CONFLICTO DE JULIÁN
+% colorines=[0 0 0 ; 0 .6 0 ; .5 1 .5; .5 .2 1; 0 .5 1 ; 1 0 1; 1 .5 1; 1 .5 .5 ; 1 .5 0 ]; % PARA EL Vï¿½DEO DE LOS 3+2 PECES CON ESTRES+EXPERIENCIA
+% colorines=[0 0 0 ; 0 0 1 ; 1 0 0; .2 .2 1 ; .5 .5 1; .7 .7 1; 1 .2 .2; 1 .5 .5 ; 1 .7 .7 ]; % PARA EL Vï¿½DEO DE GRUPOS 1 Y 2 DE CONFLICTO DE JULIï¿½N
+% colorines=[0 0 0 ; 0 0 1 ; 1 0 0; .2 .2 1 ; 1 .2 .2; 1 .5 .5; .5 .5 1; 1 .7 .7 ; .7 .7 1 ]; % PARA EL Vï¿½DEO DE GRUPOS 3 Y 4 DE CONFLICTO DE JULIï¿½N
 
-datos.nombrespeces='123456789QWERTYUIOPASDFGHJKL';
+datos.nombrespeces='123456789QWERTYUIOPASDFGHJKLMN';
 
 % n_archivos=size(datosarchivos.archivo2frame,1);
 % for c_archivos=1:n_archivos
@@ -118,21 +126,44 @@ info_act='Slide to navigate the video';
 h.barrita=uicontrol('Style','slider','Value',1,'Min',1,'Max',100,'Units','Normalized','Position',[0 0 1 .05],'TooltipString',info_act);
 info_act=sprintf('Click to start/stop reproduction.\nYou can also:\n- Hit spacebar to start/stop\n- Use the mouse scroll wheel to navigate step-by-step');
 h.push_run=uicontrol('Style','pushbutton','Units','normalized','Position',[.9 .4 .09 .05],'String','Run','BackgroundColor',color_fondo,'TooltipString',info_act);
+
 info_act='Number of frames advanced per step. Typing a number at any moment will automatically edit this box';
 h.text_nframes=uicontrol('Style','text','Units','normalized','Position',[.9 .3 .09 .05],'String','Speed','BackgroundColor',color_fondo,'TooltipString',info_act);
 h.edit_nframes=uicontrol('Style','edit','Units','Normalized','Position',[.9 .25 .09 .05],'String','1','TooltipString',info_act);
+
 info_act='Current frame';
 h.text_frameactual=uicontrol('Style','text','Units','normalized','Position',[.9 .15 .09 .05],'String','Frame','BackgroundColor',color_fondo,'TooltipString',info_act);
-h.frameactual=uicontrol('Style','edit','Units','Normalized','Position',[.9 .1 .09 .05],'String','1','tooltipstring',info_act);
+h.frameactual=uicontrol     ('Style','edit','Units','Normalized','Position',[.9 .1 .09 .05], 'String','1','Tooltipstring',info_act);
 % h.edit_velocity=uicontrol('Style','edit','Units','Normalized','Position',[.85 .9 .1 .05],'String','0.01');
 % h.t=timer('Period',0.01,'TasksToExecute',Inf,'ExecutionMode','FixedSpacing','BusyMode','drop');
+
+%Daniel
+info_act='Font Size';
+h.text_font_size=uicontrol('Style','text','Units','normalized','Position',[.9 .50 .07 .03],'String','Font size','BackgroundColor',color_fondo,'TooltipString',info_act);
+h.font_size=uicontrol     ('Style','edit','Units','Normalized','Position',[.9 .47 .07 .03],'String','16','TooltipString',info_act);
+h.font_sizeR=h.font_size;
+
 h.text_quality=uicontrol('Style','text','Units','normalized','Position',[.9 .55 .09 .2],'String','','BackgroundColor',color_fondo,'TooltipString',info_act);
+
+%Daniel
+Missing=[''];
+Repeated=[''];
+info_act='Missing labels';
+h.text_miss=uicontrol('Style','text','Units','normalized','Position',[.0 .7 .001 .001],'String',Missing,'BackgroundColor',color_fondo,'TooltipString',info_act);    
+info_act='Repeated labels';
+h.text_repeat=uicontrol('Style','text','Units','normalized','Position',[.0 .68 .001 .001],'String',Repeated,'BackgroundColor',color_fondo,'TooltipString',info_act);    
+
+
+
 
 h.menushow=uimenu('Label','Show');
 h.showtray=uimenu('Label','Trajectories','Parent',h.menushow);
 h.showtrozos=uimenu('Label','Fragments','Parent',h.menushow);
 h.showidnumbers=uimenu('Label','Id''s (numbers)','Parent',h.menushow);
 h.showid=uimenu('Label','Id''s (colors)','Parent',h.menushow);
+h.showMissingid=uimenu('Label','Missing Id''s ','Parent',h.menushow);
+h.showMissingCircles=uimenu('Label','Missing Id''s Circles ','Parent',h.menushow);
+h.showVideoFilter=uimenu('Label','Video Filter','Parent',h.menushow);
 h.menuhelp=uimenu('Label','Help');
 
 %% Carga datos
@@ -200,7 +231,9 @@ guidata(h.figure,datos)
 %% Define callbacks, timers y esas cosas
 set(h.barrita,'Max',frametotal);
 set(h.barrita,'Callback',@(uno,dos) ruedecita(uno,dos,h))
-set(h.frameactual,'Callback',@(uno,dos) cambiaframe(uno,dos,h))
+set(h.frameactual,'Callback',@(uno,dos)    cambiaframe(uno,dos,h))
+set(h.font_size  ,'Callback',@(uno,dos) changefontsize(uno,dos,h)) 
+%changing fonts
 set(h.push_run,'Callback',@(uno,dos) correr(uno,dos,h))
 % set(h.t,'TimerFcn',@(uno,dos) ruedecita(uno,dos,h))
 set(h.figure,'windowscrollwheelfcn',@(uno,dos) ruedecita(uno,dos,h))
@@ -215,6 +248,9 @@ set(h.figure,'KeyPressFcn',@(uno,dos) tecla(uno,dos,h))
 set(h.showtray,'Callback',@(uno,dos) cambiacheck(uno,dos,h))
 set(h.showtrozos,'Callback',@(uno,dos) cambiacheck(uno,dos,h))
 set(h.showid,'Callback',@(uno,dos) cambiacheck(uno,dos,h))
+set(h.showMissingid,'Callback',@(uno,dos) cambiacheck(uno,dos,h)) %Daniel, missing labels
+set(h.showMissingCircles,'Callback',@(uno,dos) cambiacheck(uno,dos,h)) %Daniel, missing circles
+set(h.showVideoFilter,'Callback',@(uno,dos) cambiacheck(uno,dos,h)) %Daniel, filter
 set(h.showidnumbers,'Callback',@(uno,dos) cambiacheck(uno,dos,h))
 set(h.ejes,'ButtonDownFcn',@(uno,dos) seleccionapez(uno,dos,h))
 set(h.menuhelp,'Callback',@(uno,dos) ayuda(uno,dos))
@@ -239,7 +275,7 @@ if ispc
 else
     barra='/';
 end
-
+barra=filesep
 datos=guidata(h.figure);
 if isfield(h,'popup_plato') && uno==h.popup_plato
     plato_act=get(uno,'Value');
@@ -249,18 +285,21 @@ if isfield(h,'popup_plato') && uno==h.popup_plato
     datos.h.lineas=[];
     for c=1:length(datos.h.textos)
         delete(datos.h.textos(c))
+        delete(datos.h.MissingCircles(c))%Daniel
+        delete(datos.h.RepeatedCircles(c))%Daniel
     end
     datos.h.textos=[];
+    datos.h.MissingCirles=[]; %Daniel
 else
     plato_act=1;
 end
 
-load([datos.directorio 'segm' datos.nombresplatos{plato_act} '\datosegm.mat'])
+load([datos.directorio 'segm' datos.nombresplatos{plato_act} barra 'datosegm.mat'])
 if isstruct(variable)
     datosegm=variable;
     clear variable
 else
-    datosegm=load_encrypt([datos.directorio 'segm' datos.nombresplatos{plato_act} '\datosegm.mat'],1);
+    datosegm=load_encrypt([datos.directorio 'segm' datos.nombresplatos{plato_act} barra 'datosegm.mat'],1);
 end
 datosegm.directorio=[datos.directorio 'segm' datos.nombresplatos{plato_act} barra];
 datosegm.directorio_videos=datos.directorio;
@@ -282,7 +321,7 @@ datos.corriendo=false;
 
 
 datos.datosegm=datosegm;
-datos.colorines=[.5 .5 .5 ; jet(datos.datosegm.n_peces)];
+datos.colorines=[1. 1. 1. ; jet(datos.datosegm.n_peces)]; %Daniel changed zero 0 white
 datos.esperandocorreccion=false;
 axes(h.ejes)
 
@@ -320,8 +359,14 @@ if ~isempty(archivos)
     end
 
     datos.mancha2pez=mancha2pez;
-    for c_peces=1:size(mancha2pez,2) % Si había trozos, esto sobreescribe a lo anterior. Pero no pasa nada.
-        datos.h.textos(c_peces)=text(NaN,NaN,'','Color','r','FontWeight','bold','HorizontalAlignment','center','HitTest','off');
+    my_colour = [240 93 24] ./ 255;
+    for c_peces=1:size(mancha2pez,2) % Si habï¿½a trozos, esto sobreescribe a lo anterior. Pero no pasa nada.
+        datos.h.textos(c_peces)=text(NaN,NaN,'','Color','r','FontWeight','bold','FontSize',12,'HorizontalAlignment','center','HitTest','off');
+        %Daniel
+        %datos.h.MissingCircles(c_peces)=text(NaN, NaN,'o','FontSize',h.font_sizeR*2.5,'HorizontalAlignment','center','VerticalAlignment','middle')
+        %datos.h.RepeatedCircles(c_peces)=text(NaN, NaN,'o','FontSize',h.font_sizeR*2.5,'HorizontalAlignment','center','VerticalAlignment','middle')
+        datos.h.MissingCircles(c_peces)=rectangle('Position',[ 0 0 0.01 0.01 ],'Curvature',[1 1],'EdgeColor','y','LineWidth',1);
+        datos.h.RepeatedCircles(c_peces)=rectangle('Position',[ 0 0 0.01 0.01 ],'Curvature',[1 1],'EdgeColor',my_colour,'LineWidth',1);
     end % c_peces
     clear mancha2pez
     if isempty(coletilla)
@@ -330,8 +375,26 @@ if ~isempty(archivos)
     datos.coletilla=coletilla;
     set(h.showid,'Check','on')
     set(h.showidnumbers,'Check','on')
-else
-    set(h.showid,'Enable','off')
+else %Daniel
+    set(h.showid,'Check','on')
+    set(h.showidnumbers,'Check','on')
+    load([datosegm.directorio 'trozos.mat'])
+    troz=variable;
+    man2pez.mancha2pez=ones(size(troz.trozos,1),size(troz.trozos,2))*NaN;
+    man2pez.trozo2pez=ones(size(troz.trozo2indiv,2),1)*NaN;
+    man2pez.probtrozos_relac=ones(size(troz.trozo2indiv,2),datos.datosegm.n_peces)*NaN;
+    datos.mancha2pez=man2pez.mancha2pez;
+    datos.coletilla='';
+    my_colour = [240 93 24] ./ 255;
+    for c_peces=1:size(man2pez.mancha2pez,2) % Si habï¿½a trozos, esto sobreescribe a lo anterior. Pero no pasa nada.
+        datos.h.textos(c_peces)=text(NaN,NaN,'','Color','r','FontWeight','bold','FontSize',12,'HorizontalAlignment','center','HitTest','off');
+        %Daniel
+        %datos.h.MissingCircles(c_peces)=text(NaN, NaN,'o','FontSize',h.font_sizeR*2.5,'HorizontalAlignment','center','VerticalAlignment','middle')
+        %datos.h.RepeatedCircles(c_peces)=text(NaN, NaN,'o','FontSize',h.font_sizeR*2.5,'HorizontalAlignment','center','VerticalAlignment','middle')
+        datos.h.MissingCircles(c_peces)=rectangle('Position',[ 0 0 0.01 0.01 ],'Curvature',[1 1],'EdgeColor','y','LineWidth',1);
+        datos.h.RepeatedCircles(c_peces)=rectangle('Position',[ 0 0 0.01 0.01 ],'Curvature',[1 1],'EdgeColor',my_colour,'LineWidth',1);
+    end % c_peces
+    
 end
 
 % Trozos
@@ -349,8 +412,14 @@ elseif ~isempty(dir([datosegm.directorio 'trozos.mat']))
         load([datosegm.directorio 'trozos.mat'])
     end
     datos.trozos=trozos;
+    my_colour = [240 93 24] ./ 255;
     for c_peces=1:size(trozos,2)
         datos.h.textos(c_peces)=text(NaN,NaN,'','Color','r','FontWeight','bold','FontSize',12,'HitTest','off');
+        %Daniel
+        %datos.h.MissingCircles(c_peces)=text(NaN, NaN,'o','FontSize',h.font_sizeR*2.5,'HorizontalAlignment','center','VerticalAlignment','middle')
+        %datos.h.RepeatedCircles(c_peces)=text(NaN, NaN,'o','FontSize',h.font_sizeR*2.5,'HorizontalAlignment','center','VerticalAlignment','middle')
+        datos.h.MissingCircles(c_peces)=rectangle('Position',[ 0 0 0.01 0.01 ],'Curvature',[1 1],'EdgeColor','y','LineWidth',1);
+        datos.h.RepeatedCircles(c_peces)=rectangle('Position',[ 0 0 0.01 0.01 ],'Curvature',[1 1],'EdgeColor',my_colour,'LineWidth',1);
     end % c_peces
     clear trozos    
 else
@@ -403,7 +472,7 @@ guidata(h.figure,datos)
 
 
 
-%% Activar y desactivar checks en en los menús
+%% Activar y desactivar checks en en los menï¿½s
 function cambiacheck(uno,dos,h)
 if strcmpi(get(uno,'Check'),'on')
     set(uno,'Check','off')
@@ -416,9 +485,12 @@ else
     end
 end
 
+
 % Cambia el frame al editar el cuadro de texto
 function cambiaframe(uno,dos,h) 
 ind_frame=str2double(get(h.frameactual,'String'));
+
+
 datos=guidata(h.figure);
 if ind_frame>=1 && ind_frame<=size(datos.datosegm.frame2archivo,1)
     set(h.contframe,'XData',ind_frame);
@@ -430,6 +502,22 @@ else
     ind_frame=get(h.contframe,'XData');
     set(h.frameactual,'String',num2str(ind_frame))
 end
+
+function changefontsize(uno,dos,h)
+
+    fonte=str2double(get(h.font_size,'String'));
+    set(h.font_size,'String',num2str(fonte))
+    pintaframe(uno,dos,h)
+    
+    
+    
+    
+   
+
+
+
+
+
 
 
 %Pinta el frame q toca
@@ -456,13 +544,14 @@ ind_frame=min([ind_frame size(datos.datosegm.frame2archivo,1)]);
 set(h.contframe,'XData',ind_frame)%volvemos a guardar ind_frame
 drawnow update
 pintaframe(uno,dos,h)
+
     
 %actualizar el valor de la barra al nuevo datos.frame
-% guidata(h.figure,datos) % Pongo aquí el guidata para que los datos queden guardados antes de llegar a la parte pesada del programa
+% guidata(h.figure,datos) % Pongo aquï¿½ el guidata para que los datos queden guardados antes de llegar a la parte pesada del programa
 function pintaframe(uno,dos,h)%Pinta el frame q toca
 
 datos=guidata(h.figure);
-% Anula la espera de corrección
+% Anula la espera de correcciï¿½n
 title('')
 datos.datosegm.esperacorreccion=false;
 
@@ -473,7 +562,8 @@ if estado==1
 elseif estado==0
     set(h.control,'XData',1)
     
-    
+
+
     ind_frame=get(h.contframe,'XData');%llamamos a ind_frame
     
 %     disp('Pintaframe')
@@ -486,7 +576,7 @@ elseif estado==0
         if archivo_act~=datos.archivoabierto
             %     fprintf('%g,',archivo_act)
             if isfield(datos.datosegm,'encriptar')
-                if datos.datosegm.encriptar
+                if datosegm.encriptar
                     segm=load_encrypt([datos.datosegm.directorio datos.datosegm.raizarchivo '_' num2str(archivo_act)],datos.datosegm.encriptar);
                 else
                     load([datos.datosegm.directorio datos.datosegm.raizarchivo '_' num2str(archivo_act)])
@@ -503,7 +593,7 @@ elseif estado==0
     
     if datos.usavideo
         archivovideo_act=datos.datosegm.frame2archivovideo(ind_frame,1);
-        % Comprueba si hay que crear el objeto vídeo de nuevo
+        % Comprueba si hay que crear el objeto vï¿½deo de nuevo
         crearobj=true;
         if isfield(datos,'obj') && ~isempty(datos.obj{archivovideo_act})
             try a=get(datos.obj{archivovideo_act}); crearobj=false; catch; end
@@ -546,7 +636,12 @@ elseif estado==0
         for c_manchas=1:length(datos.segm(frame_act).pixels)
             frame(datos.segm(frame_act).pixels{c_manchas})=0;
         end
-    end % if usar vídeo original
+    end % if usar vï¿½deo original
+    
+    %Daniel
+    if strcmpi(get(h.showVideoFilter,'Checked'),'on')                
+        frame=colour_filter(frame);
+    end
     set(h.frame,'CData',frame)
     set(h.barrita,'Value',ind_frame)
     set(h.frameactual,'String',num2str(ind_frame));
@@ -569,8 +664,85 @@ elseif estado==0
             end
         end
     end
+    %Daniel
+    %how to calculate number of identified animals
+    %sum(datos.trozos(ind_frame,:)>0)
+    MisFishPos   =ones(datos.datosegm.n_peces,4)*0.0001;
+    RepeatFishPos=ones(datos.datosegm.n_peces,4)*0.0001;
+    for c_circles=1:datos.datosegm.n_peces                      
+                set(datos.h.MissingCircles (c_circles),'Position',MisFishPos(c_circles,:))
+                set(datos.h.RepeatedCircles(c_circles),'Position',RepeatFishPos(c_circles,:))        
+    end   
+    Missing=[''];
+    Repeated=[''];
+    my_colour = [240 93 24] ./ 255;
+    set(h.text_miss,'String',Missing,'BackgroundColor','y','Position',[.0 .7 .001 .001]);          
+    set(h.text_repeat,'String',Repeated,'BackgroundColor',my_colour,'Position',[.0 .68 .001 .001]);    
+    if strcmpi(get(h.showMissingid,'Checked'),'on') %Daniel, missing labels and repeated ones         
+         AllFish=1:datos.datosegm.n_peces;
+         MissingFishListNames=setdiff(AllFish,datos.mancha2pez(ind_frame,:));%their names, not positions
+
+        if(ind_frame>1)
+            if strcmpi(get(h.showMissingCircles,'Checked'),'on') %Daniel, missing labels and repeated ones)
+                if(size(MissingFishListNames,2) > 0)
+                    for c_missing=1:size(MissingFishListNames,2)
+                        [a b]=find(datos.mancha2pez(1:ind_frame,:)==MissingFishListNames(c_missing));% get frame and column where animal is missing
+                        if( size(a,1)>0)
+                            [c d]=max(a); % look for the last frame (highest), and to know which column it was
+                            MissingFishCirclesFrame=c;
+                            MissingFishCirclesColumn=b(d); 
+                            %[ datos.mancha2pez(c,b(d)) MissingFishListNames(c_missing) ]
+                            MisFishPos(c_missing,1)=datos.mancha2centro(MissingFishCirclesFrame,MissingFishCirclesColumn,1)-40;
+                            MisFishPos(c_missing,2)=datos.mancha2centro(MissingFishCirclesFrame,MissingFishCirclesColumn,2)-40;
+                            MisFishPos(c_missing,3)=80;
+                            MisFishPos(c_missing,4)=80; 
+                        end
+                    end
+                end
+            end
+            
+            %MissingFishCirclesIndex=find(ismember(datos.mancha2pez(ind_frame-1,:),MissingFishListNames));% their positions
+            %MissCircleFrame=ind_frame-1;
+            %if(size(MissingFishCirclesIndex,2)==0)
+            %    MissingFishCirclesIndex=find(ismember(datos.mancha2pez(ind_frame-2,:),MissingFishListNames));
+            %    MissCircleFrame=ind_frame-2;
+            %end
+            %if(size(MissingFishCirclesIndex,2)>0)
+            %    MisFishPos(1:size(MissingFishCirclesIndex,2),1)=datos.mancha2centro((MissCircleFrame),MissingFishCirclesIndex,1)-40;
+            %    MisFishPos(1:size(MissingFishCirclesIndex,2),2)=datos.mancha2centro((MissCircleFrame),MissingFishCirclesIndex,2)-40;
+            %    MisFishPos(1:size(MissingFishCirclesIndex,2),3)=80;
+            %    MisFishPos(1:size(MissingFishCirclesIndex,2),4)=80;
+            %end
+            
+            RepeatedFishListNames=(histc(datos.mancha2pez(ind_frame,:),AllFish)>1).*AllFish; %their names, not positions
+            RepeatedFishListNames(RepeatedFishListNames==0)=[];
+            RepeatedFishCirclesIndex=find(ismember(datos.mancha2pez(ind_frame,:),RepeatedFishListNames));% their positions, doubled positions, 2*n
+            
+            
+            if strcmpi(get(h.showMissingCircles,'Checked'),'on') %Daniel, missing labels and repeated ones)
+                if(size(RepeatedFishCirclesIndex,2)>0)
+                   RepeatFishPos(1:size(RepeatedFishCirclesIndex,2),1)=datos.mancha2centro((ind_frame),RepeatedFishCirclesIndex,1)-45;
+                   RepeatFishPos(1:size(RepeatedFishCirclesIndex,2),2)=datos.mancha2centro((ind_frame),RepeatedFishCirclesIndex,2)-45;
+                   RepeatFishPos(1:size(RepeatedFishCirclesIndex,2),3)=90;
+                   RepeatFishPos(1:size(RepeatedFishCirclesIndex,2),4)=90;
+                end
+            end
+            for c_circles=1:datos.datosegm.n_peces                      
+                set(datos.h.MissingCircles (c_circles),'Position',MisFishPos(c_circles,:))
+                set(datos.h.RepeatedCircles(c_circles),'Position',RepeatFishPos(c_circles,:))        
+            end
+
+
+            Missing=['The missing labels are :',num2str(datos.nombrespeces(MissingFishListNames))];
+            Repeated=['Repeated labels are:',   num2str(datos.nombrespeces(RepeatedFishListNames))];
+
+
+            set(h.text_miss,'String',Missing,'Position',[.0 .7 .15 .017]);          
+            set(h.text_repeat,'String',Repeated,'Position',[.0 .68 .15 .017]);    
+        end
+    end
     
-    if strcmpi(get(h.showtrozos,'Checked'),'on')
+    if strcmpi(get(h.showtrozos,'Checked'),'on') 
         for c_peces=1:size(datos.trozos,2)
             if datos.mancha2centro(ind_frame,c_peces,1)>0
                 set(datos.h.textos(c_peces),'String',num2str(datos.trozos(ind_frame,c_peces)))
@@ -610,7 +782,9 @@ elseif estado==0
             else
                 ind_color=1;
             end
-            set(datos.h.textos(c_peces),'Color',datos.colorines(ind_color,:))
+            h.font_sizeR=str2double(get(h.font_size,'String'));
+            set(datos.h.textos(c_peces),'Color',datos.colorines(ind_color,:),'FontSize',h.font_sizeR) %changed for fontisize
+           % set(datos.h.textos(c_peces),'FontSize',52)          
         end
     end
     
@@ -626,8 +800,10 @@ elseif estado==0
     
     guidata(h.figure,datos)
     drawnow expose update
+    %bla=[ 'figs/frame' num2str(ind_frame,'%06d') '.png'];
+    %saveas(gcf,bla);
     set(h.control,'XData',0)
-end
+end %
 % disp([datestr(inicio,'HH:MM:SS:FFF') '   ' datestr(now,'HH:MM:SS:FFF')])
 
 %% Seleccionar pez
@@ -674,12 +850,12 @@ if pos(1,1)>=0 && pos(1,1)<=datos.datosegm.tam(2) && pos(1,2)>=0 && pos(1,2)<=da
     guidata(h.figure,datos)
 end
 
-%% Pulsación de una tecla (cualquiera)
+%% Pulsaciï¿½n de una tecla (cualquiera)
 function tecla(uno,dos,h)
 % disp('Tecla')
 if ~isempty(dos.Character) % Para que no se ejecute al pulsar solo shift
 datos=guidata(h.figure);
-simbolos_shiftnums={'!','"','·','$','%','&','/','(',')','='};
+simbolos_shiftnums={'!','"','ï¿½','$','%','&','/','(',')','='};
 if ~datos.esperandocorreccion
     switch dos.Character
         case' '
@@ -697,15 +873,17 @@ if ~datos.esperandocorreccion
 %             sumas=sum(buenos,2);
 %             buenos=sumas==sumas(ind_frame);
             buenos=~any(datos.trozos>0 & ~buenos,2);
-            %             elseif isfield(datos,'pezseleccionado') && datos.pezseleccionado>0 % Siguiente cruce del que está seleccionado
-            %                 mancha_act=datos.mancha2pez(ind_frame,:)==datos.pezseleccionado;
-%                 trozo_act=datos.trozos(ind_frame,mancha_act);
-%                 if length(trozo_act)==1
-%                     buenos=datos.trozos==trozo_act;
-%                 end
-%             elseif isfield(datos,'trozoseleccionado') && datos.trozoseleccionado>0 && any(datos.trozos(ind_frame,:)==datos.trozoseleccionado) % Si no hay pez seleccionado, sólo actúa si seguimos en el trozo seleccionado
-%                 buenos=datos.trozos==datos.trozoseleccionado;
-%             end
+            %Daniel, uncommented
+            %f isfield(datos,'pezseleccionado') && datos.pezseleccionado>0 % Siguiente cruce del que estï¿½ seleccionado
+            %     mancha_act=datos.mancha2pez(ind_frame,:)==datos.pezseleccionado;
+            %     trozo_act=datos.trozos(ind_frame,mancha_act);
+            %     if length(trozo_act)==1
+            %         buenos=datos.trozos==trozo_act;
+            %     end
+            %elseif isfield(datos,'trozoseleccionado') && datos.trozoseleccionado>0 && any(datos.trozos(ind_frame,:)==datos.trozoseleccionado) % Si no hay pez seleccionado, sï¿½lo actï¿½a si seguimos en el trozo seleccionado
+            %     buenos=datos.trozos==datos.trozoseleccionado;
+            %end
+%Daniel end of commented region
             if dos.Character=='x' || dos.Character=='X' % Cruce anterior
                 buenos(ind_frame:end)=true;
                 framecruce=find(~buenos,1,'last');
@@ -743,10 +921,21 @@ if ~datos.esperandocorreccion
             title('')
     end
 else % Correcciones
-    title('')
+    if(dos.Character=='m' || dos.Character=='n') %Daniel, jump to end of segment feature
+        elementos=find(datos.trozos==datos.trozoseleccionado);
+        [frame,mancha]=ind2sub(size(datos.trozos),elementos);
+        if(dos.Character=='m') 
+            jump_to=max(frame)
+        end
+        if(dos.Character=='n') 
+            jump_to=min(frame);
+        end
+        set(h.contframe,'XData',jump_to);
+    else
+        title('')
     datos.esperandocorreccion=false;
     guidata(h.figure,datos)
-    if dos.Character=='º' || dos.Character=='0'
+    if dos.Character=='ï¿½' || dos.Character=='0'
         pezbueno=NaN;
     elseif dos.Character==' '
         pezbueno=' ';
@@ -760,9 +949,9 @@ else % Correcciones
     %             pezbueno=10;
     %         case ''''
     %             pezbueno=11;
-    %         case '¡'
+    %         case 'ï¿½'
     %             pezbueno=12;
-    %         case 'º' % Sin identificar/múltiple
+    %         case 'ï¿½' % Sin identificar/mï¿½ltiple
     %             pezbueno=NaN;
     %         otherwise
     %             pezbueno=[];
@@ -770,23 +959,24 @@ else % Correcciones
     if ~isempty(pezbueno)
         corrige(h,pezbueno)
     end
+    end
 end
 pintaframe(uno,dos,h)
 end
 
-%% Corrección de identidad
+%% Correcciï¿½n de identidad
 function corrige(h,pezbueno)
 datos=guidata(h.figure);
 % pos_fig=get(h.figure,'Position');
 % % pos_ejes=get(h.ejes,'Position');
-% pos_ejes=plotboxpos(h.ejes); % Esta función es de matlabcentral
+% pos_ejes=plotboxpos(h.ejes); % Esta funciï¿½n es de matlabcentral
 % % get(h.ejes,'Position')
 % % get(h.ejes,'TightInset')
 
 % pos2=get(0,'PointerLocation');
 % pos2=(pos2-pos_fig(1:2))./pos_fig(3:4); % Pasa a referido a la figura, y en unidades relativas
 % pos2=(pos2-pos_ejes(1:2))./pos_ejes(3:4); % Pasa a referido a los ejes, y en unidades relativas
-% pos2(2)=1-pos2(2); % Porque el eje y está invertido en imágenes.
+% pos2(2)=1-pos2(2); % Porque el eje y estï¿½ invertido en imï¿½genes.
 % tam_foto=size(get(h.frame,'CData'));
 % pos2=pos2.*tam_foto([2 1]); % Pasa a pixels
 % x=pos2(1);
@@ -838,14 +1028,14 @@ guidata(h.figure,datos)
 pintaframe([],[],h)
 
 function correr(uno,dos,h)
-corriendo=~get(h.corriendo,'XData'); % Este controla si está corriendo
+corriendo=~get(h.corriendo,'XData'); % Este controla si estï¿½ corriendo
 % corriendo
 set(h.corriendo,'XData',corriendo)
 set(h.figure, 'CurrentObject',h.figure)
 % datos=guidata(h.figure);
 % datos.corriendo=~datos.corriendo;
 % guidata(h.figure,datos);
-if corriendo && ~get(h.corriendo,'YData') % Para evitar que pueda entrar más de una vez al anidarse
+if corriendo && ~get(h.corriendo,'YData') % Para evitar que pueda entrar mï¿½s de una vez al anidarse
     set(h.corriendo,'YData',1)
     set(h.push_run,'String','Stop')
     while corriendo       
@@ -868,7 +1058,7 @@ pause(.1)
 % function corrige(uno,dos,h,archivo,titulo)
 % datos=guidata(h.figure);
 % [x,y]=ginput(1);
-% set(h.figure,'windowscrollwheelfcn',@(uno,dos) ruedecita(uno,dos,h,archivo,titulo)) % Por algún motivo raro esta función se pierde al hacer ginput.
+% set(h.figure,'windowscrollwheelfcn',@(uno,dos) ruedecita(uno,dos,h,archivo,titulo)) % Por algï¿½n motivo raro esta funciï¿½n se pierde al hacer ginput.
 % datos.trayectoria(datos.frame,1)=x;
 % datos.trayectoria(datos.frame,2)=y;
 % guidata(h.figure,datos)

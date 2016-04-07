@@ -1,11 +1,11 @@
-% 02-Feb-2014 18:15:43 Hago que matriznoson pueda ser probabilística.
-% Ahora, para los elementos distintos de 0 el número indica la probabilidad
+% 02-Feb-2014 18:15:43 Hago que matriznoson pueda ser probabilï¿½stica.
+% Ahora, para los elementos distintos de 0 el nï¿½mero indica la probabilidad
 % de que no sean del mismo individuo.
-% 15-Mar-2012 16:16:56 Cambio la condición de máximo claro, para evitar
-% problemas con el redondeo. Además, introduzco umbral_probaceptable
+% 15-Mar-2012 16:16:56 Cambio la condiciï¿½n de mï¿½ximo claro, para evitar
+% problemas con el redondeo. Ademï¿½s, introduzco umbral_probaceptable
 % APE 01 mar 12 viene de idtrozos2identidades
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pï¿½rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cientï¿½ficas
 
 % matriznoson puede ser conviven
 
@@ -56,17 +56,18 @@ end % c_trozos
 
 clear c_trozos
 
-% ATENCIÓN, PSEUDOBUG: UTILIZA PROBTROZOS_RELAC2 PARA VER LA PROBABILIDAD
-% DEL TROZO A LA HORA DE ASIGNARLO, PERO NO PARA EL ORDEN DE ASIGNACIÓN
+% ATENCIï¿½N, PSEUDOBUG: UTILIZA PROBTROZOS_RELAC2 PARA VER LA PROBABILIDAD
+% DEL TROZO A LA HORA DE ASIGNARLO, PERO NO PARA EL ORDEN DE ASIGNACIï¿½N
 % (DADO QUE MAYORES NO SE ACTUALIZA).
 
-% Ahora empieza por el más seguro, y va asignando identidades
+% Ahora empieza por el mï¿½s seguro, y va asignando identidades
 mayores=max(probtrozos_relac,[],2);
 trozo2pez=NaN(n_trozos,1);
 probtrozos_relac2=probtrozos_relac;
 % valor=probtrozos_relac(503,4);
+
 while any(~isnan(mayores))
-    [m,trozo_act]=max(mayores); % Este es el que está asignado con mayor probabilidad
+    [m,trozo_act]=max(mayores); % Este es el que estï¿½ asignado con mayor probabilidad
     ind=find(trozos==trozo_act);
     [frames,manchas]=ind2sub(tam_trozos,ind);
     if ~isnan(probtrozos(trozo_act,1))
@@ -74,14 +75,14 @@ while any(~isnan(mayores))
         if m>umbral_probaceptable
         [m2,pezorig]=max(probtrozos_relac(trozo_act,:));
         if pezorig~=pez
-            fprintf('El trozo %g (frames %g-%g) no se asignó a su mejor opción. Probabilidad de original de la asignación = %g. Probabilidad original de la mejor opción = %g.\n',trozo_act,min(frames),max(frames),probtrozos_relac(trozo_act,pez),probtrozos_relac(trozo_act,pezorig))
+            fprintf('%g. Trozos left - El trozo %g (frames %g-%g) no se asignï¿½ a su mejor opciï¿½n. Probabilidad de original de la asignaciï¿½n = %g. Probabilidad original de la mejor opciï¿½n = %g.\n',sum((~isnan(mayores))),trozo_act,min(frames),max(frames),probtrozos_relac(trozo_act,pez),probtrozos_relac(trozo_act,pezorig))
         end        
         if sum(abs(probtrozos_relac2(trozo_act,:)-m)<10^-10)==1
             trozo2pez(trozo_act)=pez;
             probtrozos(trozo_act,:)=0;
             probtrozos(trozo_act,pez)=1;
             % Ahora recalcula probtrozos_relac2 para todos los trozos
-            % con los que hay interacción
+            % con los que hay interacciï¿½n
             otrostrozos_act=find(matriznoson(trozo_act,:)>0);
             otrostrozos_act(otrostrozos_act==trozo_act)=[];
             otrostrozos_act=otrostrozos_act(~isnan(probtrozos(otrostrozos_act,1)));
@@ -109,10 +110,10 @@ while any(~isnan(mayores))
 %                 valor=probtrozos_relac2(503,4);
 %             end
         else            
-            fprintf('El trozo %g (frames %g-%g) no se asignó por no tener máximo claro.\n',trozo_act,min(frames),max(frames))            
-        end % if hay un único máximo    
+            fprintf('%g. Trozos left - El trozo %g (frames %g-%g) no se asignï¿½ por no tener mï¿½ximo claro.\n',sum((~isnan(mayores))),trozo_act,min(frames),max(frames))            
+        end % if hay un ï¿½nico mï¿½ximo    
         else
-            fprintf('El trozo %g (frames %g-%g) no se asignó por ser demasiado incierto. Probabilidad de la identificación: %g (sin contar con otros), %g (contando con otros)\n',trozo_act,min(frames),max(frames),probtrozos(trozo_act,pez),probtrozos_relac2(trozo_act,pez))            
+            fprintf('%g. Trozos left - El trozo %g (frames %g-%g) no se asignï¿½ por ser demasiado incierto. Probabilidad de la identificaciï¿½n: %g (sin contar con otros), %g (contando con otros)\n',sum((~isnan(mayores))),trozo_act,min(frames),max(frames),probtrozos(trozo_act,pez),probtrozos_relac2(trozo_act,pez))            
         end % if supera el umbral de probabilidad
     end % if no es nan
     mayores(trozo_act)=NaN;
@@ -127,7 +128,7 @@ mancha2pez(trozos>0)=trozo2pez(trozos(trozos>0));
 % trozo2pez=NaN(n_trozos,1);
 % 
 % while any(~isnan(segundos))
-%     [m,trozo_act]=min(segundos); % Este es el que más margen tiene respecto a la segunda opción
+%     [m,trozo_act]=min(segundos); % Este es el que mï¿½s margen tiene respecto a la segunda opciï¿½n
 %     
 % %     if trozo_act==23
 % %         keyboard
@@ -138,7 +139,7 @@ mancha2pez(trozos>0)=trozo2pez(trozos(trozos>0));
 %         otrostrozos=unique(trozos(frames,:));
 %         otrostrozos=otrostrozos(otrostrozos>0);
 %         otrostrozos=otrostrozos(~isnan(trozo2pez(otrostrozos)));
-%         otrostrozos(otrostrozos==trozo_act)=[]; % ESTO DEBERÍA SOBRAR, YA QUE EL TROZO ACTUAL TENDRÁ NAN.
+%         otrostrozos(otrostrozos==trozo_act)=[]; % ESTO DEBERï¿½A SOBRAR, YA QUE EL TROZO ACTUAL TENDRï¿½ NAN.
 %         pecesqueno=trozo2pez(otrostrozos);
 %         pecesqueno=pecesqueno(~isnan(pecesqueno));
 %         pecesqueno=unique(pecesqueno);
@@ -149,7 +150,7 @@ mancha2pez(trozos>0)=trozo2pez(trozos(trozos>0));
 %         framesafavor(trozo_act)=idtrozos(trozo_act,pez)-segundos(trozo_act);
 %         if logprob_act(pez)<0
 % %             keyboard
-%             fprintf('El trozo %g (frames %g-%g no se asignó a su mejor opción. Frames a favor %g.\n',trozo_act,min(frames),max(frames),framesafavor(trozo_act))
+%             fprintf('El trozo %g (frames %g-%g no se asignï¿½ a su mejor opciï¿½n. Frames a favor %g.\n',trozo_act,min(frames),max(frames),framesafavor(trozo_act))
 %         end
 %     end
 %     segundos(trozo_act)=NaN;

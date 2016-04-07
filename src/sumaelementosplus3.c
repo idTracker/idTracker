@@ -1,29 +1,13 @@
-// APE 30 may 11 Viene de sumaelementosplus2
-
-// (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
-
-// IMPORTANT NOTE: Some compilers have trouble with the comments. If you get an error when compiling, delete ALL comments and try again.
-
 #include "mex.h"
 #include "stdio.h"
 
-// double sumadora(double mapas[],double ind[])
-// {
-//     int c, ind_act;
-//     for (c=0; c<10; c++){
-//         ind_act=ind[c];
-//       printf ("%i \n",ind_act);
-// //       mapas_out[c]=ind[c];
-//   }
-//   return 1;
-// }
+
 
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs,
                  const mxArray *prhs[])
 {
   double *tam_hist, *ind_fil, *ind_col, *intensrestas, *intenssumas, *distbin, *cerca, *mapas_out, *frame_act;
-//   int mrows, ncols;
   int n_pixels, c1, c2, ind_act, indfil_dist, indcol_dist, dist_max, ind_dist, n_elemsrodaja, n_elems;
   
   /* Check for proper number of arguments. */
@@ -33,20 +17,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs,
     mexErrMsgTxt("Too many output arguments");
   }
 
-//  /* The input must be a noncomplex scalar double.*/
-//   mrows = mxGetM(prhs[0]);
-//  ncols = mxGetN(prhs[0]);
-//  if (!mxIsDouble(prhs[0]) || mxIsComplex(prhs[0]) ||
-//      !(mrows == 1 && ncols == 1)) {
-//    mexErrMsgTxt("Input must be a noncomplex scalar double.");
-//  }
+
 
   /* Create matrix for the return argument. */
   n_pixels = mxGetM(prhs[1]);
   dist_max = mxGetM(prhs[5])-1;
   
-//   plhs[0] = mxDuplicateArray(prhs[0]);
-//   printf ("%i \n",n_ind);
   
   
   
@@ -58,9 +34,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs,
   intenssumas = mxGetPr(prhs[4]);  
   distbin = mxGetPr(prhs[5]);
   cerca = mxGetPr(prhs[6]);
-//   frame_act=mxGetPr(prhs[7]);
-//   tam_hist1 = mxGetPr(prhs[7]);  
-//   n_elemsrodaja = mxGetPr(prhs[8]);    
+
   
   n_elemsrodaja=tam_hist[0]*tam_hist[1];
   n_elems=n_elemsrodaja*2;
@@ -79,33 +53,18 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs,
           indcol_dist=abs(ind_col[c2]-ind_col[c1]);
           if (indfil_dist<=dist_max && indcol_dist<=dist_max){
               ind_dist=indfil_dist+(dist_max+1)*indcol_dist;
-//               printf("%lf",cerca[ind_dist]);
-//               mexErrMsgTxt("caca");
               if (cerca[ind_dist]==1){                  
-                  ind_act = floor(abs(intensrestas[c1]-intensrestas[c2])) + tam_hist[0]*(distbin[ind_dist]-1); // Aquí está transformándose de double a int.
+                  ind_act = floor(abs(intensrestas[c1]-intensrestas[c2])) + tam_hist[0]*(distbin[ind_dist]-1); 
                   mapas_out[ind_act]=mapas_out[ind_act]+1;
-                  ind_act = n_elemsrodaja + floor(abs(intenssumas[c1]+intenssumas[c2])) + tam_hist[0]*(distbin[ind_dist]-1); // Aquí está transformándose de double a int. El -1 es porque en C los índices empiezan en 0
+                  ind_act = n_elemsrodaja + floor(abs(intenssumas[c1]+intenssumas[c2])) + tam_hist[0]*(distbin[ind_dist]-1); 
                   mapas_out[ind_act]=mapas_out[ind_act]+1;
               }
           }
       }
   }
 
-//   for (c=0; c<n_ind; c++){
-//           
-// //       printf ("%i \n",ind_act);
-// //       mapas_out[c]=ind[c];
-//   }
-  
-  
-//   ind_int = ind;
-//   printf ("%i \n\n",ind_int);
-  
-//   for (c=0; c<10; c++){
-//       printf ("%lf \n",ind[c]);
-// //       mapas_out[c]=ind[c];
-//   }
+
   
   /* Call the timestwo subroutine. */
-//   mapas_out[0] = sumadora(mapas,ind);
+
 }

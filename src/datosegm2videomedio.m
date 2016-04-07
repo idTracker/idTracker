@@ -1,31 +1,31 @@
 % 24-Dec-2013 17:12:39 Hago que tome obj de datosegm.
-% 12-Dec-2013 17:08:18 Hago que use VideoReader cuando la versión de Matlab
+% 12-Dec-2013 17:08:18 Hago que use VideoReader cuando la versiï¿½n de Matlab
 % es reciente
 % 13-Aug-2013 12:06:34 Hago que use datosegm.mascara, en vez de
 % recalcularla desde el roi
 % 03-Jun-2013 16:47:03 Evito que abra todos los archivos al principio, creando una mega-variable obj.
-% 10-Apr-2013 16:56:19 Añado datosegm.interval
-% 27-Feb-2013 20:04:29 Me doy cuenta de que la mediana tarda muchísimo más que la media, y es lo que más está tardando de la segmentación. Así que pongo otra vez media para la normalización de intensidades.
-% 11-Feb-2013 17:34:26 Añado videomedio_cuentaframes
+% 10-Apr-2013 16:56:19 Aï¿½ado datosegm.interval
+% 27-Feb-2013 20:04:29 Me doy cuenta de que la mediana tarda muchï¿½simo mï¿½s que la media, y es lo que mï¿½s estï¿½ tardando de la segmentaciï¿½n. Asï¿½ que pongo otra vez media para la normalizaciï¿½n de intensidades.
+% 11-Feb-2013 17:34:26 Aï¿½ado videomedio_cuentaframes
 % 08-Feb-2013 17:25:07 Mejoro la forma en la que pasa de color a grayscale
-% 25-Jan-2013 12:45:00 Hago que funcione con la nueva versión de datosegm
-% que permite que segm esté troceado diferente que los vídeos
-% 27-Nov-2012 19:48:51 Añado la barra de progreso del panel
+% 25-Jan-2013 12:45:00 Hago que funcione con la nueva versiï¿½n de datosegm
+% que permite que segm estï¿½ troceado diferente que los vï¿½deos
+% 27-Nov-2012 19:48:51 Aï¿½ado la barra de progreso del panel
 % 24-Nov-2012 14:24:49 Hago que pueda funcionar usando la figura del panel
-% 12-Nov-2012 17:36:49 Cambio media por mediana para la normalización de cada frame. Hago que sólo coja la parte de mascara_intensmed (antes estaba mal)
+% 12-Nov-2012 17:36:49 Cambio media por mediana para la normalizaciï¿½n de cada frame. Hago que sï¿½lo coja la parte de mascara_intensmed (antes estaba mal)
 % 10-Nov-2012 19:09:07 Lo preparo para otras extensiones
-% 24-Oct-2012 12:13:45 Añado cambiacontraste
+% 24-Oct-2012 12:13:45 Aï¿½ado cambiacontraste
 % 08-May-2012 20:28:17 Corrijo para que no falle cuando hay menos de
 % nframes_media
-% 25-Jan-2012 19:58:55 Anulo el cálculo del umbral.
-% 25-Jan-2012 19:34:19 Añado el cálculo del umbral. Además simplifico la forma
+% 25-Jan-2012 19:58:55 Anulo el cï¿½lculo del umbral.
+% 25-Jan-2012 19:34:19 Aï¿½ado el cï¿½lculo del umbral. Ademï¿½s simplifico la forma
 % de elegir los frames, usando equiespaciados.
 % APE 22 ago 11
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pï¿½rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cientï¿½ficas
 
-% Este programa carga frame a frame en vez de vídeos completos. Esto hace
-% que el proceso de carga sea como 4 veces más lento, pero tiene la ventaja
+% Este programa carga frame a frame en vez de vï¿½deos completos. Esto hace
+% que el proceso de carga sea como 4 veces mï¿½s lento, pero tiene la ventaja
 % de no necesitar tanta memoria.
 %
 % handles se refiere a los handles del panel (varible h). Puede simplemente no meterse.
@@ -43,7 +43,7 @@ end
 camposhandles={'ejes','lienzo_manchas','lienzo_mascara','frame','waitBackground','textowaitBackground','Background'};
 if nargin<3
     handles=[];
-else % Comprueba que todos los handles están activos. Si no, los anula por seguridad.
+else % Comprueba que todos los handles estï¿½n activos. Si no, los anula por seguridad.
     for c_campos=1:length(camposhandles)
         if ~isfield(handles,camposhandles{c_campos}) || ~ishandle(handles.(camposhandles{c_campos}))
             handles=[];
@@ -96,7 +96,7 @@ end
 archivoabierto=0;
 for frame_act=indices
     archivo=datosegm.frame2archivovideo(frame_act,1);
-    % Comprueba si hay que crear el objeto vídeo de nuevo
+    % Comprueba si hay que crear el objeto vï¿½deo de nuevo
     crearobj=true;
     if isfield(datosegm,'obj') && ~isempty(datosegm.obj{archivo})
         try a=get(datosegm.obj{archivo}); crearobj=false; catch; end
@@ -128,8 +128,9 @@ for frame_act=indices
 % catch
 %     keyboard
 % end
-        if size(frame,3)==3
-            frame(:,:,1)=rgb2gray(frame);
+    %Daniel, dirt contrast correction       
+        if size(frame,3)==3                        
+            frame=colour_filter(frame);
             frame=frame(:,:,1);
         end
 %     else
@@ -141,12 +142,12 @@ for frame_act=indices
     %             imagesc(frame)
     %             title(num2str([frame_act archivo frame_arch]))
     %             ginput(1);
-    frame_doub=double(frame(:,:,1,1)); % Los dos unos deberían ser innecesarios
+    frame_doub=double(frame(:,:,1,1)); % Los dos unos deberï¿½an ser innecesarios
     if datosegm.cambiacontraste
         frame_doub=255-frame_doub;
     end
     frame_doub=frame_doub/mean(frame_doub(mascara_intensmed));
-    if all(~isnan(frame_doub(:))) % Porque en algunos vídeos hay algún frame raro que es todo negro
+    if all(~isnan(frame_doub(:))) % Porque en algunos vï¿½deos hay algï¿½n frame raro que es todo negro
         suma = suma + frame_doub;
         videomedio_cuentaframes=videomedio_cuentaframes+(frame_doub<datosegm.umbral);
         c_frames=c_frames+1;
@@ -183,9 +184,9 @@ end
 
 
 
-% % Cálculo del umbral
-% indices=round(mean([indices(1:end-1) ; indices(2:end)],1)); % Cojo los frames más alejados de los usados para el vídeo medio
-% % Ahora cojo máximo 100 de estos frames
+% % Cï¿½lculo del umbral
+% indices=round(mean([indices(1:end-1) ; indices(2:end)],1)); % Cojo los frames mï¿½s alejados de los usados para el vï¿½deo medio
+% % Ahora cojo mï¿½ximo 100 de estos frames
 % if length(indices)>100
 %     indices=indices(equiespaciados(100,length(indices)));
 % end

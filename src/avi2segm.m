@@ -1,48 +1,48 @@
-% 01-Feb-2014 11:18:47 Cambio la definición de centroide, ahora es el
-% centro del conjunto de pixels más alejados de los bordes
-% 21-Dec-2013 14:35:22 Mejoras de eficiencia, y paralelización
-% 20-Dec-2013 20:12:55 Introduzco el número máximo de manchas.
+% 01-Feb-2014 11:18:47 Cambio la definiciï¿½n de centroide, ahora es el
+% centro del conjunto de pixels mï¿½s alejados de los bordes
+% 21-Dec-2013 14:35:22 Mejoras de eficiencia, y paralelizaciï¿½n
+% 20-Dec-2013 20:12:55 Introduzco el nï¿½mero mï¿½ximo de manchas.
 % 13-Aug-2013 12:03:26 Anulo la parte en la que no se usa datosegm.mascara
-% 10-Apr-2013 17:26:34 Incorporo la posibilidad de que no se haga la segmentación de todos los frames (o de ninguno), para los casos en los que sólo se traquea un intervalo
-% 27-Feb-2013 20:03:03 Me doy cuenta de que la mediana tarda muchísimo más que la media, y es lo que más está tardando de la segmentación. Así que pongo otra vez media para la normalización de intensidades.
+% 10-Apr-2013 17:26:34 Incorporo la posibilidad de que no se haga la segmentaciï¿½n de todos los frames (o de ninguno), para los casos en los que sï¿½lo se traquea un intervalo
+% 27-Feb-2013 20:03:03 Me doy cuenta de que la mediana tarda muchï¿½simo mï¿½s que la media, y es lo que mï¿½s estï¿½ tardando de la segmentaciï¿½n. Asï¿½ que pongo otra vez media para la normalizaciï¿½n de intensidades.
 % 08-Feb-2013 17:27:31 Hago que pase el video a grayscale
 % 23-Nov-2012 16:33:51 Actualizo: Si existe datosegm.mascara, no usa la roi.
-% 23-Nov-2012 08:47:06 Meto aquí cambiacontraste
+% 23-Nov-2012 08:47:06 Meto aquï¿½ cambiacontraste
 % 12-Nov-2012 17:45:36 Nada.
-% 12-Nov-2012 17:35:27 Cambio media por mediana para la normalización de los frames
-% 17-Oct-2012 20:56:36 Cambio limpiamierda. Ahora cuando la segmentación no
+% 12-Nov-2012 17:35:27 Cambio media por mediana para la normalizaciï¿½n de los frames
+% 17-Oct-2012 20:56:36 Cambio limpiamierda. Ahora cuando la segmentaciï¿½n no
 % es buena elimina los pixeles mierda, y si la mancha que queda supera el
 % umbral de pez la coge.
-% 31-Jul-2012 09:33:38 Añado la posibilidad de excluir una zona para el
-% cálculo de intensmed
-% 26-Jul-2012 20:38:56 Añado el límite máximo de pixels
-% 23-Jul-2012 20:46:21 Añado limpiamierda
+% 31-Jul-2012 09:33:38 Aï¿½ado la posibilidad de excluir una zona para el
+% cï¿½lculo de intensmed
+% 26-Jul-2012 20:38:56 Aï¿½ado el lï¿½mite mï¿½ximo de pixels
+% 23-Jul-2012 20:46:21 Aï¿½ado limpiamierda
 % 14-Mar-2012 20:55:50 Hago que cuando no hay roi, el borde vaya por el
 % borde, valga la redundancia.
-% 31-Jan-2012 19:56:40 Añado la opción de roi circular
-% 22-Nov-2011 18:19:37 Añado la resegmentacion
-% 18-Nov-2011 10:59:36 Añado la posibilidad de seleccionar un roi
-% 14-Nov-2011 19:02:48 Corrección. Cuando ind tiene dos valores, hago que
-% coja el más grande.
+% 31-Jan-2012 19:56:40 Aï¿½ado la opciï¿½n de roi circular
+% 22-Nov-2011 18:19:37 Aï¿½ado la resegmentacion
+% 18-Nov-2011 10:59:36 Aï¿½ado la posibilidad de seleccionar un roi
+% 14-Nov-2011 19:02:48 Correcciï¿½n. Cuando ind tiene dos valores, hago que
+% coja el mï¿½s grande.
 % 11-Nov-2011 18:08:37 Vuelvo a usar la intensidad sola para segmentar, y
-% la diferencia sólo para seleccionar las manchas que están bien.
-% 10-Nov-2011 17:55:22 Lo cambio, de modo que cuando usaresta=1 sólo usa la diferencia para
-% la segmentación.
-% APE 10 nov 11 Viene de avi2miniframes. Cambio la segmentación, usando
+% la diferencia sï¿½lo para seleccionar las manchas que estï¿½n bien.
+% 10-Nov-2011 17:55:22 Lo cambio, de modo que cuando usaresta=1 sï¿½lo usa la diferencia para
+% la segmentaciï¿½n.
+% APE 10 nov 11 Viene de avi2miniframes. Cambio la segmentaciï¿½n, usando
 % imdilate sobre la diferencia. Espero que esto mejore los casos donde hay
 % mucho fondo.
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pï¿½rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cientï¿½ficas
 
-% Una forma de filtrar sombras que sería más rápida que el uso de
-% videomedio sería simplemente coger aquéllas cuyo mínimo de intensidad
-% estuviera por debajo de un umbral muy restrictivo. Funcionaría casi
-% siempre, pero la descarto porque probablemente fallaría en los frames en
+% Una forma de filtrar sombras que serï¿½a mï¿½s rï¿½pida que el uso de
+% videomedio serï¿½a simplemente coger aquï¿½llas cuyo mï¿½nimo de intensidad
+% estuviera por debajo de un umbral muy restrictivo. Funcionarï¿½a casi
+% siempre, pero la descarto porque probablemente fallarï¿½a en los frames en
 % los que el pez queda muy desenfocado debido al movimiento.
 
 function [segm,frame_out]=avi2segm(video,datosegm,usaresta,roi,traqueaframes)
 
-centrosnuevos=true; % Mantengo la posibilidad de revertir fácilmente a los centros antiguos
+centrosnuevos=true; % Mantengo la posibilidad de revertir fï¿½cilmente a los centros antiguos
 
 if isfield(datosegm,'max_manchas') && isfield(datosegm.max_manchas,'relativo') && isfield(datosegm.max_manchas,'absoluto')
     max_manchas=max([datosegm.max_manchas.absoluto datosegm.max_manchas.relativo*datosegm.n_peces]);
@@ -54,9 +54,14 @@ if nargin<5 || isempty(traqueaframes)
     traqueaframes=true(size(video,4),1);
 end
 
+
+%Daniel
 if size(video,3)==3
     for c_frames=1:size(video,4)
-        video(:,:,1,c_frames)=rgb2gray(video(:,:,:,c_frames));
+        frame=video(:,:,:,c_frames);               
+        frame=colour_filter(frame);
+        video(:,:,1,c_frames)=rgb2gray(frame);%Daniel
+        %video(:,:,1,c_frames)=rgb2gray(video(:,:,:,c_frames));
     end
     video=video(:,:,1,:);
 end
@@ -66,11 +71,11 @@ if datosegm.cambiacontraste
 end
 
 umbralmierda_segmbuena=.1;
-umbral_mierdecillas=datosegm.umbral_npixels/5; % Tamaño por debajo del cual se desprecian los restos de las manchas que solapaban con fondo.
+umbral_mierdecillas=datosegm.umbral_npixels/5; % Tamaï¿½o por debajo del cual se desprecian los restos de las manchas que solapaban con fondo.
 % umbralmierda_pez=.7;
 
 % if usaresta
-%     fprintf('Atención: La segmentación aquí se está haciendo con la diferencia, pero al construir los mapas se hará con la intensidad')
+%     fprintf('Atenciï¿½n: La segmentaciï¿½n aquï¿½ se estï¿½ haciendo con la diferencia, pero al construir los mapas se harï¿½ con la intensidad')
 % end
 
 % if nargin<2 || isempty(datosegm)
@@ -86,7 +91,7 @@ if nargin<4
 end
 
 % if ~isfield(datosegm,'mascara')
-%     error('Esto está obsoleto')
+%     error('Esto estï¿½ obsoleto')
 %     mascara=true(datosegm.tam);
 %     borde=false(datosegm.tam);
 %     if ~isempty(roi)
@@ -161,7 +166,7 @@ for c_frames=1:n_frames
         frame=double(frame_orig);
         segm(c_frames).intensmed=mean(frame(mascara_intensmed));
         umbral=umbral_orig*segm(c_frames).intensmed;
-        %     frame=frame/segm(c_frames).intensmed; % ESTO ES MÁS EFICIENTE SI LO QUE RE-ESCALO ES EL UMBRAL. PERO SI LO CAMBIO TENGO QUE TENER CUIDADO CON EL SEGUNDO OUTPUT
+        %     frame=frame/segm(c_frames).intensmed; % ESTO ES Mï¿½S EFICIENTE SI LO QUE RE-ESCALO ES EL UMBRAL. PERO SI LO CAMBIO TENGO QUE TENER CUIDADO CON EL SEGUNDO OUTPUT
         %     if usaresta
         %         binario_todos=(frame<umbral(1)) & mascara;
         %         diferencia=frame-videomedio;
@@ -180,15 +185,15 @@ for c_frames=1:n_frames
         % %             1
         %             if length(ind)>0
         % %                 2
-        %                 [ind,numUnique] = count_unique(ind); %% ATENCIÓN: ESTA FUNCIÓN NO ES MÍA, LA HE COGIDO DE MATLABCENTRAL
+        %                 [ind,numUnique] = count_unique(ind); %% ATENCIï¿½N: ESTA FUNCIï¿½N NO ES Mï¿½A, LA HE COGIDO DE MATLABCENTRAL
         %                 [m,ind_mayor]=max(numUnique);
-        %                 ind=ind(ind_mayor); % Si hay más de un valor, coge el que más pixels tenga
+        %                 ind=ind(ind_mayor); % Si hay mï¿½s de un valor, coge el que mï¿½s pixels tenga
         %                 mancha_act=L==ind;
         %                 if sum(mancha_act(:))>length(manchas_dif.PixelIdxList{c_manchas})*1.5 % Si se agranda demasiado, la rechaza y usa la que viene de la diferencia
         % %                     3
         %                     segmbuena_act=false;
         %                     pixels_act=manchas_dif.PixelIdxList{c_manchas};
-        %                 else % Si todo está bien, usamos la segmentación por intensidades
+        %                 else % Si todo estï¿½ bien, usamos la segmentaciï¿½n por intensidades
         % %                     4
         %                     segmbuena_act=true;
         %                     pixels_act=find(mancha_act);
@@ -236,7 +241,7 @@ for c_frames=1:n_frames
                 listapixels{c_malos}=listapixels{c_malos}(~pixelsmierda(listapixels{c_malos}));
                 tams(c_malos)=length(listapixels{c_malos});
                 if tams(c_malos)>umbral_npixels
-                    % Quito manchas aisladas muy pequeñas
+                    % Quito manchas aisladas muy pequeï¿½as
                     lienzo=false(tam);
                     lienzo(listapixels{c_malos})=true;
                     manchas_act=bwconncomp(lienzo);
@@ -262,7 +267,7 @@ for c_frames=1:n_frames
         end
         %     end % if usaresta
         
-        % Resegmentación
+        % Resegmentaciï¿½n
         if length(umbral)==2
             binario_resegm=(frame<umbral(2)) & mascara;
             umbralnpixels_act=umbral_npixels*sum(binario_resegm(:))/sum(binario(:));
@@ -290,7 +295,7 @@ for c_frames=1:n_frames
         segm(c_frames).intensmed=NaN;
     end
     % Si hay demasiadas manchas, no las coge (para evitar que la memoria se
-    % vaya de madre más adelante)
+    % vaya de madre mï¿½s adelante)
     if n_buenos>max_manchas
         n_buenos=0;
         listapixels=[];
@@ -310,8 +315,8 @@ for c_frames=1:n_frames
     %     frame_uint8(~binario)=255;
     for c_buenos=1:length(listapixels)
         %         if tams(buenos(c_buenos))>1.5*sum(binario_dif(manchas.PixelIdxList{buenos(c_buenos)}))
-        %             % Si la mancha ha crecido demasiado, cogemos sólo la parte que
-        %             % coincide con la segmentación sin videomedio
+        %             % Si la mancha ha crecido demasiado, cogemos sï¿½lo la parte que
+        %             % coincide con la segmentaciï¿½n sin videomedio
         %             manchas.PixelIdxList{buenos(c_buenos)}=manchas.PixelIdxList{buenos(c_buenos)}(binario_dif(manchas.PixelIdxList{buenos(c_buenos)}));
         %             segm(c_frames).segmbuena(c_buenos)=false;
         %         else
@@ -320,13 +325,13 @@ for c_frames=1:n_frames
         if centrosnuevos
             lienzo=false(datosegm.tam);
             lienzo(listapixels{c_buenos})=true;
-            ind=find(lienzo); % En este caso es más rápido hacerlo con find que sin find            
+            ind=find(lienzo); % En este caso es mï¿½s rï¿½pido hacerlo con find que sin find            
             x=X(ind);
             y=Y(ind);            
             limites=[min(x) max(x) min(y) max(y)];
-            % Nota: distancias no se resetea, así que quedan elementos de
-            % pasadas anteriores. No importa, porque sólo voy a utilizar
-            % los índices que están en ind. Pero hay que tener cuidado con
+            % Nota: distancias no se resetea, asï¿½ que quedan elementos de
+            % pasadas anteriores. No importa, porque sï¿½lo voy a utilizar
+            % los ï¿½ndices que estï¿½n en ind. Pero hay que tener cuidado con
             % esto          
             minilienzo=true(diff(limites(3:4))+3,diff(limites(1:2))+3); % Dejo un pixel de margen para que el exterior del pez cuente como que no hay pez
             minilienzo(2:end-1,2:end-1)=~lienzo(limites(3):limites(4),limites(1):limites(2));
@@ -345,7 +350,7 @@ for c_frames=1:n_frames
         segm(c_frames).borde(c_buenos)=any(borde(listapixels{c_buenos}));
     end
     
-    % HAGO QUE SEGMBUENA INCORPORE TAMBIÉN EL BORDE, PARA QUE EL RESTO DEL
+    % HAGO QUE SEGMBUENA INCORPORE TAMBIï¿½N EL BORDE, PARA QUE EL RESTO DEL
     % TRACKING EXCLUYA LOS QUE TOCAN BORDE.
     segm(c_frames).segmbuena=segm(c_frames).segmbuena & ~segm(c_frames).borde;
     

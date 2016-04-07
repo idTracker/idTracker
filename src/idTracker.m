@@ -1,116 +1,115 @@
-% 09-Oct-2015 10:26:14 Nada.
 % 21-Jul-2014 22:38:46 Hago que funcione en mac y linux (/ en vez de \)
 % 15-Jul-2014 18:09:12 Separo las trayectorias en trajectories y
 % trajectories_nogaps
-% 29-Apr-2014 08:59:03 Elimino la encriptación
-% 17-Mar-2014 11:19:29 Limpieza y reorganización general. Cambio
+% 29-Apr-2014 08:59:03 Elimino la encriptaciï¿½n
+% 17-Mar-2014 11:19:29 Limpieza y reorganizaciï¿½n general. Cambio
 % getComputerName por leer directamente el hostname
-% 13-Mar-2014 10:26:49 Hago que guarde más a menudo datosegm (para que se
+% 13-Mar-2014 10:26:49 Hago que guarde mï¿½s a menudo datosegm (para que se
 % guarden los tiempos)
-% 15-Feb-2014 13:54:51 Añado la resegmentación
+% 15-Feb-2014 13:54:51 Aï¿½ado la resegmentaciï¿½n
 % 07-Feb-2014 09:34:22 Hago que guarde los tiempos
-% 04-Feb-2014 15:13:59 Hago que pueda quedarse justo después de calcular
+% 04-Feb-2014 15:13:59 Hago que pueda quedarse justo despuï¿½s de calcular
 % referencias
-% 02-Feb-2014 20:02:11 Añado el cálculo de ramificaciones para tener en
+% 02-Feb-2014 20:02:11 Aï¿½ado el cï¿½lculo de ramificaciones para tener en
 % cuenta los trozos a los que ha podido ir un pez en cada momento. REVIERTO
 % PARCIALMENTE: Lo dejo preparado, pero desactivado. Porque tampoco
-% funciona demasiado bien, y me da miedo que sea más impredecible.
-% 08-Jan-2014 11:15:14 Hago que abra matlabpool aunque sólo se quiera 1
-% procesador. Además no abre matlabpool si ya está abierto con el número de
+% funciona demasiado bien, y me da miedo que sea mï¿½s impredecible.
+% 08-Jan-2014 11:15:14 Hago que abra matlabpool aunque sï¿½lo se quiera 1
+% procesador. Ademï¿½s no abre matlabpool si ya estï¿½ abierto con el nï¿½mero de
 % procesadores adecuado.
-% 04-Jan-2014 21:32:13 Añado el recálculo de tam_mapas si es necesario
-% 22-Dec-2013 02:23:38 Hago que vaya más rápido si hay un solo bicho
+% 04-Jan-2014 21:32:13 Aï¿½ado el recï¿½lculo de tam_mapas si es necesario
+% 22-Dec-2013 02:23:38 Hago que vaya mï¿½s rï¿½pido si hay un solo bicho
 % 21-Dec-2013 12:48:19 Cambio raizarchivos por nombrearchivo, para poder
-% incluir la extensión
-% 21-Dec-2013 11:51:49 Cambios estéticos sobre todo
-% 20-Dec-2013 20:07:17 Hago que por defecto identifique un máximo de 1000
-% frames por trozo. Además, hago que por defecto rechaze frames en los que
-% haya más de 2*n_peces manchas.
-% 12-Dec-2013 20:01:21 Hago que muestre el número de procesadores que está
+% incluir la extensiï¿½n
+% 21-Dec-2013 11:51:49 Cambios estï¿½ticos sobre todo
+% 20-Dec-2013 20:07:17 Hago que por defecto identifique un mï¿½ximo de 1000
+% frames por trozo. Ademï¿½s, hago que por defecto rechaze frames en los que
+% haya mï¿½s de 2*n_peces manchas.
+% 12-Dec-2013 20:01:21 Hago que muestre el nï¿½mero de procesadores que estï¿½
 % usando realmente
-% 12-Dec-2013 15:37:42 Hago que guarde la versión de Matlab para elegir
+% 12-Dec-2013 15:37:42 Hago que guarde la versiï¿½n de Matlab para elegir
 % entre mmreader y VideoReader
-% 02-Dec-2013 19:10:14 Hago que encripte automáticamente si no hay
+% 02-Dec-2013 19:10:14 Hago que encripte automï¿½ticamente si no hay
 % argumentos de entrada
-% 01-Dec-2013 10:25:32 Hago que las trayectorias se guarden también en el
-% directorio del vídeo, y mejoro el mensaje de despedida.
+% 01-Dec-2013 10:25:32 Hago que las trayectorias se guarden tambiï¿½n en el
+% directorio del vï¿½deo, y mejoro el mensaje de despedida.
 % 29-Nov-2013 10:04:14 Hago que por defecto sean 5 individuos.
-% 29-Nov-2013 08:20:35 Hago que los errores salgan más elegantemente.
-% Además cambio la fecha en datosegm.version (esto debería hacerlo más a
+% 29-Nov-2013 08:20:35 Hago que los errores salgan mï¿½s elegantemente.
+% Ademï¿½s cambio la fecha en datosegm.version (esto deberï¿½a hacerlo mï¿½s a
 % menudo)
 % 28-Nov-2013 20:33:03 Hago que muestre un aviso al terminar
 % 25-Nov-2013 17:46:17 Paso de trayectorias a trajectories, en incoroporo
-% la transformación a txt.
+% la transformaciï¿½n a txt.
 % 22-Nov-2013 18:18:55
 % 05-Nov-2013 14:54:18 Revierto al sistema de referencias antiguo
 % 25-Sep-2013 21:26:12 Meto el nuevo sistema de referencias
 % 19-Jul-2013 16:08:12 Hago que se pueda forzar que coja referencias
 % incluso cuando hay un solo pez
-% 04-Jul-2013 20:50:02 Hago que se pueda controlar el número de procesadores
-% 18-Jun-2013 19:22:53 Añado mancha2centro
+% 04-Jul-2013 20:50:02 Hago que se pueda controlar el nï¿½mero de procesadores
+% 18-Jun-2013 19:22:53 Aï¿½ado mancha2centro
 % 10-Jun-2013 14:41:27
-% 08-Jun-2013 22:07:07 Añado el fichero de log
-% 31-May-2013 20:49:35 Añado la posibilidad de encriptar los archivos
-% 31-May-2013 16:22:41 Hago que pueda funcionar sin entradas (para la versión compilada)
-% 28-May-2013 19:35:30 Añado la opción de sólo calcular el datosegm básico. Además cambio la salida, de trayectorias a datosegm
-% 09-May-2013 09:56:22 Hago que cuando está activo empezarsinmas reutilice todo por defecto (a menos que empezarsinmas sea 2)
-% 30-Apr-2013 11:37:33 Hago que sólo reutilice las detección de manchas individuales si encuentra indiv
-% Además, hago que no abra matlabpool si está en Trueno
+% 08-Jun-2013 22:07:07 Aï¿½ado el fichero de log
+% 31-May-2013 20:49:35 Aï¿½ado la posibilidad de encriptar los archivos
+% 31-May-2013 16:22:41 Hago que pueda funcionar sin entradas (para la versiï¿½n compilada)
+% 28-May-2013 19:35:30 Aï¿½ado la opciï¿½n de sï¿½lo calcular el datosegm bï¿½sico. Ademï¿½s cambio la salida, de trayectorias a datosegm
+% 09-May-2013 09:56:22 Hago que cuando estï¿½ activo empezarsinmas reutilice todo por defecto (a menos que empezarsinmas sea 2)
+% 30-Apr-2013 11:37:33 Hago que sï¿½lo reutilice las detecciï¿½n de manchas individuales si encuentra indiv
+% Ademï¿½s, hago que no abra matlabpool si estï¿½ en Trueno
 % 26-Apr-2013 17:40:24 Hago que calcule trozos antes de buscar manchas
 % individuales (lo hago para poder borrar segm.pixels cuando subo datos a
 % Trueno)
-% 25-Apr-2013 17:33:02 Añado Trueno
-% 17-Apr-2013 11:58:53 Añado la opción "save & exit"
-% 10-Apr-2013 16:40:53 Añado la posibilidad de traquear sólo un intervalo
-% 28-Feb-2013 12:01:04 Añado el detector de blanco y negro o color
+% 25-Apr-2013 17:33:02 Aï¿½ado Trueno
+% 17-Apr-2013 11:58:53 Aï¿½ado la opciï¿½n "save & exit"
+% 10-Apr-2013 16:40:53 Aï¿½ado la posibilidad de traquear sï¿½lo un intervalo
+% 28-Feb-2013 12:01:04 Aï¿½ado el detector de blanco y negro o color
 % 18-Feb-2013 10:51:00 Hago que pueda reutilizar trozos
-% 11-Feb-2013 18:09:13 Hago que pixelsmierda pueda calcularse con el método de contar frames
-% 24-Jan-2013 12:55:36 Actualizo a la nueva versión de solapamiento2trozos
+% 11-Feb-2013 18:09:13 Hago que pixelsmierda pueda calcularse con el mï¿½todo de contar frames
+% 24-Jan-2013 12:55:36 Actualizo a la nueva versiï¿½n de solapamiento2trozos
 % 27-Nov-2012 18:43:13 Cambio el formato de reutiliza
-% 23-Nov-2012 14:36:50 Integro el panel. Además, hago que pueda meterse datosegm como único argumento de entrada.
-% Además, reorganizo para que cosas como npixels se calculen al hacer la segmentación, y reordeno para que estén
-% más claros los pasos que pueden reutilizarse.
+% 23-Nov-2012 14:36:50 Integro el panel. Ademï¿½s, hago que pueda meterse datosegm como ï¿½nico argumento de entrada.
+% Ademï¿½s, reorganizo para que cosas como npixels se calculen al hacer la segmentaciï¿½n, y reordeno para que estï¿½n
+% mï¿½s claros los pasos que pueden reutilizarse.
 % 23-Nov-2012 08:47:37 Quito cambiacontraste de la llamada a datosegm2segms
-% 21-Nov-2012 15:15:36 Meto el panel. Además reorganizo varias cosas. Quito el código que correspondía al caso de meter
-% el vídeo ya segmentado (de todos modos ese código era antiguo y probablemente ya no funcionaría)
-% 16-Nov-2012 14:28:25 Hago que se pueda elegir entre adquisición de referencias antigua o nueva.
-% 18-Oct-2012 14:44:33 Añado el panel de control
+% 21-Nov-2012 15:15:36 Meto el panel. Ademï¿½s reorganizo varias cosas. Quito el cï¿½digo que correspondï¿½a al caso de meter
+% el vï¿½deo ya segmentado (de todos modos ese cï¿½digo era antiguo y probablemente ya no funcionarï¿½a)
+% 16-Nov-2012 14:28:25 Hago que se pueda elegir entre adquisiciï¿½n de referencias antigua o nueva.
+% 18-Oct-2012 14:44:33 Aï¿½ado el panel de control
 % 03-Oct-2012 18:49:01 Cambio de excluyezona_intensmed a mascara_intensmed
-% 19-Sep-2012 11:31:58 Hago que funcione mejor para vídeos de un solo pez.
-% Salta la clasificación de manchas individuales, y no hace la
-% identificación usando los mapas.
-% 31-Jul-2012 09:28:59 Añado la posibilidad de excluir una zona para el
-% cálculo de intensmed
+% 19-Sep-2012 11:31:58 Hago que funcione mejor para vï¿½deos de un solo pez.
+% Salta la clasificaciï¿½n de manchas individuales, y no hace la
+% identificaciï¿½n usando los mapas.
+% 31-Jul-2012 09:28:59 Aï¿½ado la posibilidad de excluir una zona para el
+% cï¿½lculo de intensmed
 % 26-Jul-2012 20:50:24 Hago que vuelva a usar las versiones antiguas de
 % datosegm2referencias y datosegm2intervalosbuenos
-% 26-Jul-2012 20:39:39 Añado el tamaño máximo de manchas
-% 23-Jul-2012 20:42:13 Añado el limpiador de mierda
+% 26-Jul-2012 20:39:39 Aï¿½ado el tamaï¿½o mï¿½ximo de manchas
+% 23-Jul-2012 20:42:13 Aï¿½ado el limpiador de mierda
 % 27-Jun-2012 19:35:36 Hago que pueda funcionar con referencias externas
 % 01-Jun-2012 18:51:26 Intento mejorar la eficiencia en el uso de memoria
 % 19-May-2012 11:20:21 Hago que pueda reutilizar las refs. individuales.
 % 08-May-2012 19:26:00 Modificaciones menores.
-% 13-Mar-2012 20:10:03 Incluyo la comprobación de número de peces en cada
+% 13-Mar-2012 20:10:03 Incluyo la comprobaciï¿½n de nï¿½mero de peces en cada
 % mancha
 % 08-Mar-2012 21:07:11 Actualizo, metiendo todos los cambios que he metido
 % en identitracking_refsexternas.
-% 22-Feb-2012 19:22:25 Añado la posibilidad de invertir el contraste
+% 22-Feb-2012 19:22:25 Aï¿½ado la posibilidad de invertir el contraste
 % 26-Jan-2012 17:50:16 De momento, nada.
-% 06-Dec-2011 11:23:43 Añado matriznoson
-% 18-Nov-2011 14:36:36 Añado roi
-% 10-Nov-2011 17:59:50 Cambio a la nueva segmentación en la que sólo tiene
+% 06-Dec-2011 11:23:43 Aï¿½ado matriznoson
+% 18-Nov-2011 14:36:36 Aï¿½ado roi
+% 10-Nov-2011 17:59:50 Cambio a la nueva segmentaciï¿½n en la que sï¿½lo tiene
 % en cuenta la diferencia con el videomedio
-% 14-Oct-2011 17:55:14 Cambio el cálculo de las probabilidades de error.
+% 14-Oct-2011 17:55:14 Cambio el cï¿½lculo de las probabilidades de error.
 % APE 11 oct 11 Viene de identitracking_masdedos
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pï¿½rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cientï¿½ficas
 
 % umbral=-1 significa que se ajusta manualmente.
-% raizarchivos=[] significa que ya está hecha la segmentación, y buscará
+% raizarchivos=[] significa que ya estï¿½ hecha la segmentaciï¿½n, y buscarï¿½
 % datosegm.
 %
-% mascara_intensmed debe ser una matriz lógica del mismo tamaño que los
-% frames, con unos en la región de la que se quiere sacar la intensidad
-% media. Si se deja vacía, al final se cogerá la roi.
+% mascara_intensmed debe ser una matriz lï¿½gica del mismo tamaï¿½o que los
+% frames, con unos en la regiï¿½n de la que se quiere sacar la intensidad
+% media. Si se deja vacï¿½a, al final se cogerï¿½ la roi.
 
 
 function datosegm=idTracker(directorio,nombrearchivo,directorio_destino,n_peces,umbral,reutiliza,roi,cambiacontraste,referencias,mascara_intensmed,solodatosegm)
@@ -123,7 +122,7 @@ if ispc
 else
     barra='/';
 end
-
+barra=filesep
 try
     
     if nargin==0
@@ -135,7 +134,7 @@ try
         end
     end
     
-    if nargin~=1 % Si sólo hay un argumento de entrada, será datosegm
+    if nargin~=1 % Si sï¿½lo hay un argumento de entrada, serï¿½ datosegm
         if nombrearchivo(end-3)=='.'
             extension=nombrearchivo(end-2:end);
             nombrearchivo=nombrearchivo(1:end-4);
@@ -153,7 +152,7 @@ try
         end
         
         if nargin<3 || isempty(directorio_destino)
-            directorio_destino=[directorio 'segm\'];
+            directorio_destino=[directorio 'segm' barra];
         end
         if isempty(dir(directorio_destino))
             mkdir(directorio_destino)
@@ -206,17 +205,17 @@ try
         datosegm.roi=roi;
         datosegm.cambiacontraste=cambiacontraste;
         
-        % primerframe_intervalosbuenos=5000; % No se consideran los primeros 5000 frames para las referencias, porque la pared podría afectar. Esto es para vídeos de agresión.
+        % primerframe_intervalosbuenos=5000; % No se consideran los primeros 5000 frames para las referencias, porque la pared podrï¿½a afectar. Esto es para vï¿½deos de agresiï¿½n.
         datosegm.primerframe_intervalosbuenos=1;
         datosegm.interval=[1 size(datosegm.frame2archivo,1)];
-        % primerframe_intervalosbuenos=24*500; % Para el vídeo con mano y techo de Julián
-        % primerframe_intervalosbuenos=20*500; % Para mi vídeo con mano y techo
+        % primerframe_intervalosbuenos=24*500; % Para el vï¿½deo con mano y techo de Juliï¿½n
+        % primerframe_intervalosbuenos=20*500; % Para mi vï¿½deo con mano y techo
         datosegm.nframes_refs=3000;
         datosegm.ratio_bwdist=2;
         % disp('Guarning reduceresol!')
         datosegm.reduceresol=1; % Para moscas
         % reduceresol=3; % Para ratones
-        % reduceresol=2; % Para ratones, cámara más lejos
+        % reduceresol=2; % Para ratones, cï¿½mara mï¿½s lejos
         
         datosegm.n_procesadores=Inf;
         
@@ -224,7 +223,7 @@ try
         datosegm.limpiamierda=true;
         datosegm.refsantiguas=false;
         
-        % Cosas que todavía falta integrar en el panel:
+        % Cosas que todavï¿½a falta integrar en el panel:
         datosegm.mascara_intensmed=mascara_intensmed;
     else
         datosegm=directorio;
@@ -251,8 +250,8 @@ try
     
     if nargin<11 || ~solodatosegm
         
-        % Cosas que creo que están obsoletas
-        %         datosegm.umbral_dif=-.4; % Cambiado el 23 jul 12 para el tracking del vídeo guarro de 12 peces de Julián.
+        % Cosas que creo que estï¿½n obsoletas
+        %         datosegm.umbral_dif=-.4; % Cambiado el 23 jul 12 para el tracking del vï¿½deo guarro de 12 peces de Juliï¿½n.
         % datosegm.usaresta=false; % Para ratones
         
         datosegm=datosegm2progreso(datosegm);
@@ -301,10 +300,10 @@ try
             %         end
             %         copyfile([datosegm.directorio 'datosegm.mat'],[directorio_subemierdas '\datosegm' datestr(now,30) '.mat'])
             %     end
-            %     if ispc && matlabpool('size')==0 % Sólo abre matlabpool si está en un pc, porque si es linux indica que estamos en Trueno.
+            %     if ispc && matlabpool('size')==0 % Sï¿½lo abre matlabpool si estï¿½ en un pc, porque si es linux indica que estamos en Trueno.
             % %                 disp('Guarning! No se abre matlabpool!')
-            %         matlabpool open % Lo abre con la configuración por defecto par el ordenador
-            %         %         disp('Guarning! Matlabpool se abre sólo con 6 procesadores')
+            %         matlabpool open % Lo abre con la configuraciï¿½n por defecto par el ordenador
+            %         %         disp('Guarning! Matlabpool se abre sï¿½lo con 6 procesadores')
             % %                 matlabpool open local 4
             %         %     matlabpool open local 8
             %     end
@@ -314,7 +313,7 @@ try
                     matlabpool close
                 end
                 if datosegm.n_procesadores==Inf
-                    matlabpool open % Configuración por defecto del ordenador
+                    matlabpool open % Configuraciï¿½n por defecto del ordenador
                 else
                     matlabpool('open','local',datosegm.n_procesadores)
                 end
@@ -340,7 +339,7 @@ try
                 save([datosegm.directorio 'datosegm.mat'],'variable')
             end
             
-%             % Por si datosegm viene de una versión antigua
+%             % Por si datosegm viene de una versiï¿½n antigua
 %             pasos={'Background' 'Segmentation' 'Individualization' 'Trozos' 'Resegmentation' 'References' 'Identification' 'Trajectories' 'FillGaps'};
 %             for c_pasos=1:length(pasos)
 %                 if ~isfield(datosegm.reutiliza,pasos{c_pasos})
@@ -351,12 +350,12 @@ try
 %                 end
 %             end
             
-            % Vídeo medio
+            % Vï¿½deo medio
             n_frames=size(datosegm.frame2archivo,1);
             if datosegm.limpiamierda && (~isfield(datosegm,'videomedio') || isempty(datosegm.videomedio) || ~datosegm.reutiliza.Background)
                 datosegm.tiempos.videomedio(1)=now;
                 if isempty(h_panel) || ~ishandle(h_panel.fig)
-                    fprintf('Vídeo medio\n')
+                    fprintf('Vï¿½deo medio\n')
                 end
                 datosegm=datosegm2videomedio(datosegm,100,h_panel);
                 if datosegm.limpiamierda
@@ -369,16 +368,16 @@ try
                 datosegm.tiempos.tiempoguardando=datosegm.tiempos.tiempoguardando+toc;
             end
 %             fprintf(datosegm.id_log,'%s - Videomedio done\n',datestr(now,30));
-            % % Selección manual del umbral
+            % % Selecciï¿½n manual del umbral
             % if umbral==-1
             %     umbral=datosegm2umbral_manual(datosegm);
             %     datosegm.umbral=umbral;
             %     save([datosegm.directorio 'datosegm.mat'],'datosegm')
             % end
             
-            % Segmentación, solapamiento y mapas
+            % Segmentaciï¿½n, solapamiento y mapas
             if isempty(h_panel) || ~ishandle(h_panel.fig)
-                fprintf('Segmentación, solapamiento y mapas\n')
+                fprintf('Segmentaciï¿½n, solapamiento y mapas\n')
             end
             if ~datosegm.reutiliza.Segmentation || isempty(dir([datosegm.directorio 'segm_' num2str(size(datosegm.archivo2frame,1)) '.mat']))
 %                 fprintf(datosegm.id_log,'%s - Segmentation...\n',datestr(now,30));
@@ -402,7 +401,7 @@ try
                 datosegm.tiempos.tiempoguardando=datosegm.tiempos.tiempoguardando+toc;
             else
                 if isempty(h_panel)
-                    fprintf('Reutiliza segmentación anterior.\n')
+                    fprintf('Reutiliza segmentaciï¿½n anterior.\n')
                 end
                 load([datosegm.directorio 'datosegm.mat'])
                 datosegm=variable;
@@ -453,10 +452,10 @@ try
             
             
             
-            if ~isfield(datosegm,'trueno') || ~(datosegm.trueno==1) % trueno será 2 cuando esté preparado para continuar en el cluster.
-                % Si es necesario, recalcula tam_mapas (esto no debería hacer falta
-                % prácticamente nunca, sólo cuando se ha cancelado el tracking en
-                % un momento muy concreto de la segmentación de algunos vídeos)
+            if ~isfield(datosegm,'trueno') || ~(datosegm.trueno==1) % trueno serï¿½ 2 cuando estï¿½ preparado para continuar en el cluster.
+                % Si es necesario, recalcula tam_mapas (esto no deberï¿½a hacer falta
+                % prï¿½cticamente nunca, sï¿½lo cuando se ha cancelado el tracking en
+                % un momento muy concreto de la segmentaciï¿½n de algunos vï¿½deos)
                 if ~isfield(datosegm,'tam_mapas')
                     load([datosegm.directorio 'npixelsyotros.mat']);
                     npixelsyotros=variable;
@@ -470,16 +469,16 @@ try
                 end
                 
                 % Crea las referencias para distinguir peces individuales de manchas
-                % múltiples.
+                % mï¿½ltiples.
                 nframes_refindiv=5;
                 refs_indiv=NaN([datosegm.tam_mapas nframes_refindiv*datosegm.n_peces]);
                 if datosegm.n_peces>1 || (isfield(datosegm,'siemprerefs') && datosegm.siemprerefs)
                     if isempty(referencias)
-                        % Asume que los frames con igual número de manchas que de peces
+                        % Asume que los frames con igual nï¿½mero de manchas que de peces
                         % tienen todas las manchas individuales
                         if ~datosegm.reutiliza.Individualization || isempty(dir([datosegm.directorio 'refs_indiv.mat']))
                             framesbuenos=find(datosegm.n_manchas==datosegm.n_peces);
-                            % disp('Guarning, guarning, guarning, guarning!!!!! Esto sólo funciona para los vídeos de learning de Sara!')
+                            % disp('Guarning, guarning, guarning, guarning!!!!! Esto sï¿½lo funciona para los vï¿½deos de learning de Sara!')
                             % if isempty(framesbuenos) && n_peces==2
                             %     datosegm.n_peces=1;
                             %     n_peces=1;
@@ -568,7 +567,7 @@ try
                         variable=refsindiv;
                         save([datosegm.directorio 'refs_indiv.mat'],'variable')
                         %                 save([datosegm.directorio 'refs_indiv.mat'],'refs_indiv','errores_pezindiv')
-                        datosegm.umbral_errorindiv=mean(errores_pezindiv)+std(errores_pezindiv)*10; % Damos 10 sd's. Cambio de 3 a 10 el 24 de feb del 12. Quizá 3 estaba bien para los vídeos de cerca, pero no para los de lejos.
+                        datosegm.umbral_errorindiv=mean(errores_pezindiv)+std(errores_pezindiv)*10; % Damos 10 sd's. Cambio de 3 a 10 el 24 de feb del 12. Quizï¿½ 3 estaba bien para los vï¿½deos de cerca, pero no para los de lejos.
                         variable=datosegm;
                         save([datosegm.directorio 'datosegm.mat'],'variable')
                         clear refsindiv
@@ -592,7 +591,7 @@ try
                         variable=datosegm;
                         save([datosegm.directorio 'datosegm.mat'],'variable')
                     else
-                        disp('Reutiliza identificación de manchas individuales')
+                        disp('Reutiliza identificaciï¿½n de manchas individuales')
                         load([datosegm.directorio 'indiv.mat'])
                         indiv=variable;
                     end
@@ -600,20 +599,20 @@ try
                 
 %                 fprintf(datosegm.id_log,'%s - Individualization done\n',datestr(now,30));
 %                 
-                % Resegmentación               
+                % Resegmentaciï¿½n               
                 if datosegm.n_peces>1 && (~isfield(datosegm,'resegmentar') || datosegm.resegmentar)
                     n_archivos=size(datosegm.archivo2frame,1);
                     load([datosegm.directorio datosegm.raizarchivo '_' num2str(n_archivos)])
                     segm=variable;
                     if ~datosegm.reutiliza.Resegmentation || ~isfield(segm,'resegmentado')
-                        % Resegmentación (todo se guarda dentro)
+                        % Resegmentaciï¿½n (todo se guarda dentro)
                         datosegm.tiempos.resegmentacion(1)=now;
                         [datosegm,npixelsyotros,solapamiento,trozos,solapos,conectan,conviven,solapan,indiv]=datosegm2resegmentacion(datosegm,h_panel);
                         campos=fieldnames(npixelsyotros);
                         for c_campos=1:length(campos)
                             eval([campos{c_campos} '=npixelsyotros.' campos{c_campos} ';'])
                         end
-                        % Se asegura de que el último segm tenga el campo
+                        % Se asegura de que el ï¿½ltimo segm tenga el campo
                         % resegmentado, para saber luego si este paso ha
                         % terminado
                         n_archivos=size(datosegm.archivo2frame,1);
@@ -628,14 +627,17 @@ try
                         variable=datosegm;
                         save([datosegm.directorio 'datosegm.mat'],'variable')
                     else
-                        disp('Reutiliza resegmentación')
+                        disp('Reutiliza resegmentaciï¿½n')
                     end
                 end
                 
+                %if isfield(datosegm,'stopafterresegmentation') && datosegm.stopafterresegmentation==true
+                    caca
+                %end
                 
                 if isempty(referencias)
                     if datosegm.n_peces>1 || (isfield(datosegm,'siemprerefs') && datosegm.siemprerefs)
-                        % Intervalos válidos para las referencias
+                        % Intervalos vï¿½lidos para las referencias
                         fprintf('Intervalos buenos\n')
                         if ~datosegm.reutiliza.References || isempty(dir([datosegm.directorio 'intervalosbuenos.mat']))
                             %         intervalosbuenos=datosegm2intervalosbuenos(datosegm,primerframe_i
@@ -705,8 +707,8 @@ try
                 
 %                 fprintf(datosegm.id_log,'%s - References done\n',datestr(now,30));
                 
-                % % Análisis de las referencias para buscar probabilidades de error
-                % fprintf('Análisis de probabilidades de error\n')
+                % % Anï¿½lisis de las referencias para buscar probabilidades de error
+                % fprintf('Anï¿½lisis de probabilidades de error\n')
                 % if ~reutiliza(7) || isempty(whos('maxprob'))
                 %     mat_validos=datosegm.indvalidos;
                 %     indvalidos{1}=find(mat_validos(:,:,1));
@@ -715,10 +717,10 @@ try
                 %     [probasignacion,asignacion,n_validos,menores]=referencias2probasignacion(referencias,indvalidos,200);
                 %     save([datosegm.directorio 'probasignacion.mat'],'probasignacion','asignacion','n_validos','menores')
                 % else
-                %     fprintf('Reutiliza análisis de errores.\n')
+                %     fprintf('Reutiliza anï¿½lisis de errores.\n')
                 % end
                 
-                % Identificación
+                % Identificaciï¿½n
                 % prob_id=datosegm2segm_id(datosegm,referencias,maxprob,binsc,indvalidos,reutiliza);
                 % save([datosegm.directorio 'prob_id.mat'],'prob_id')
                 
@@ -757,7 +759,7 @@ try
                             mat_validos(:,:,1)=false;
                             indvalidos{2}=find(mat_validos);
                             datosegm.tiempos.identificacion(1)=now;
-                            mancha2id=trozos2mancha2id(datosegm,trozos,solapos,indvalidos,referencias,[],1,h_panel); % mancha2id se guarda automáticamente desde dentro del programa
+                            mancha2id=trozos2mancha2id(datosegm,trozos,solapos,indvalidos,referencias,[],1,h_panel); % mancha2id se guarda automï¿½ticamente desde dentro del programa
                             datosegm.tiempos.identificacion(2)=now;
                             variable=datosegm;
                             save([datosegm.directorio 'datosegm.mat'],'variable')
@@ -774,7 +776,7 @@ try
                         load([datosegm.directorio 'mancha2id.mat']);
                         man2id=variable;
                         mancha2id=man2id.mancha2id;
-                        disp('Reutiliza identificación')
+                        disp('Reutiliza identificaciï¿½n')
                     end
                     
 %                     fprintf(datosegm.id_log,'%s - Identification done\n',datestr(now,30));
@@ -809,12 +811,12 @@ try
                         
 %                         fprintf(datosegm.id_log,'%s - conectanconviven done\n',datestr(now,30));
 % % %                         
-                        % Cálculo del número de peces en cada mancha
+                        % Cï¿½lculo del nï¿½mero de peces en cada mancha
                         % [mancha2indiv,mancha2borde]=datosegm2mancha2indiv(datosegm);
                         % save([datosegm.directorio 'mancha2indiv.mat'],'mancha2indiv','mancha2borde')
                         load([datosegm.directorio 'conectanconviven.mat'])
                         [mancha2pez,trozo2pez,probtrozos_relac]=probtrozos2identidades(trozos,probtrozos,conviven);
-                        % Para tener en cuenta la dinámica, usar esto:
+                        % Para tener en cuenta la dinï¿½mica, usar esto:
                         %             [probramificaciones,relevantes]=trozos2probramificaciones(trozos,solapan);
                         %             matriznoson=(probramificaciones==0 & relevantes)*.9; % Asumo que hay una probabilidad de 0.1 de que haya un error en matriznoson
                         %             matriznoson(conviven)=1;
@@ -904,7 +906,7 @@ try
                     end
                 end % if not soloreferencias
             else
-                datosegm.trueno=2; % Para que sí continúe la próxima vez que se ejecute
+                datosegm.trueno=2; % Para que sï¿½ continï¿½e la prï¿½xima vez que se ejecute
                 variable=datosegm;
                 save([datosegm.directorio 'datosegm.mat'],'variable')
             end % if not trueno

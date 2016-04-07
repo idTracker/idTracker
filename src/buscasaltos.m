@@ -1,13 +1,13 @@
-% 18-Feb-2014 12:20:58 Anulo la reasignación poco segura (paso 4). Ahora solo
+% 18-Feb-2014 12:20:58 Anulo la reasignaciï¿½n poco segura (paso 4). Ahora solo
 % reasigna cuando el que estaba antes no es posible.
 % 13-Feb-2014 10:14:17 Introduzco el concepto de sospechosos
 % APE 11 feb 14
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pï¿½rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cientï¿½ficas
 
 function [trozo2pez,fijos,cambiados]=buscasaltos(trozos,trozo2pez,probtrozos_relac,mancha2centro,conviven)
 
-% Recorto todo si hay parte sin rellenar (normalmente no debería ser
+% Recorto todo si hay parte sin rellenar (normalmente no deberï¿½a ser
 % necesario)
 ultimorelleno=find(any(mancha2centro(:,:,1),2)>0,1,'last');
 trozos=trozos(1:ultimorelleno,:);
@@ -19,7 +19,7 @@ conviven=conviven(1:n_trozos,1:n_trozos);
 
 conviven(1:n_trozos+1:n_trozos^2)=false; % Anulo la diagonal
 
-% Cálculo de velocidades típicas
+% Cï¿½lculo de velocidades tï¿½picas
 x=mancha2centro(:,:,1);
 y=mancha2centro(:,:,2);
 vel=[];
@@ -34,20 +34,26 @@ vel=sort(vel);
 umbral_vel=2*vel(round(.99*length(vel)));
 n_peces=max(trozo2pez(:));
 
-% Primero calcula velocidades de conexión para cada trozo dudoso
+% Primero calcula velocidades de conexiï¿½n para cada trozo dudoso
 [velanterior,velsiguiente,trozoanterior,trozosiguiente,distanterior,distsiguiente]=trozos2velsentretrozos(trozos,trozo2pez,mancha2centro);
 
-% Ahora reasigna los que tengan más sentido reasignados
+% Ahora reasigna los que tengan mï¿½s sentido reasignados
 % vel=velanterior+velsiguiente;
+%Daniel
 asignados=find(trozo2pez>0);
 ind=sub2ind(size(probtrozos_relac),asignados,trozo2pez(asignados));
 probasignado=probtrozos_relac(ind);
 probtrozos_relac(ind)=0;
 probsegundo=max(probtrozos_relac(asignados,:),[],2);
 ratioprobs=NaN(1,n_trozos);
-ratioprobs(asignados)=probasignado./probsegundo;
+ratioprobs(asignados)=probasignado.*probasignado./probsegundo;%Daniel
+%Basically before to say it was fixed, you had to be 10x greater
+% now this is not enough, now you have to be 10X greater and
+% be at least 50% sure
+%ratioprobs(asignados)=probasignado.*probasignado./probsegundo;
 fijos=false(1,n_trozos);
-fijos(ratioprobs>10)=true;
+%fijos(ratioprobs>10)=true;
+fijos(ratioprobs>5)=true;%Daniel
 asignados=trozo2pez'>0;
 % Primero fija todos los que pueda de los que encajan bien. Una vez todos
 % fijos, empieza a reasignar
@@ -60,7 +66,7 @@ umbral_anular=3;
 % Pasos: 
 % 1- Fija los que solo tengan un posible y coincida con su identidad asignada
 % 2- Reasigna y fija los que solo tengan un posible y no coincida con su
-% identidad asignada. Además anula los que no tengan posibles.
+% identidad asignada. Ademï¿½s anula los que no tengan posibles.
 % 3- Fija los que tengan varios posibles, pero su identidad asignada coincida con su mejorpez
 % 4- Anula los que puedan mejorar su fit y tengan un ratioprobs
 % bajo (por debajo de umbral_anular)
@@ -70,7 +76,7 @@ while pasosactivos<5
 %     if ~reasignar
 %         tipoorden='descend';
 %     else
-%         tipoorden='ascend'; % Para reasignar, vamos de menos a más probables
+%         tipoorden='ascend'; % Para reasignar, vamos de menos a mï¿½s probables
 %     end
     [s,orden]=sort(ratioprobs(quedan),'descend');
     quedan=quedan(orden);
@@ -132,7 +138,7 @@ while pasosactivos<5
 %             listatrozos=find(any(trozoanterior==c_trozos,2) |
 %             any(trozosiguiente==c_trozos,2))'; % Los tengo que recalcular
 %             todos, porque pueden cambiar los trozos que van delante y
-%             detrás al camiar la identidad
+%             detrï¿½s al camiar la identidad
             listatrozos=find(trozo2pez'>0 & ~fijos);
             if ~isempty(listatrozos)
                 [velanterior(listatrozos,:),velsiguiente(listatrozos,:),trozoanterior(listatrozos,:),trozosiguiente(listatrozos,:),distanterior(listatrozos,:),distsiguiente(listatrozos,:)]=trozos2velsentretrozos(trozos,trozo2pez,mancha2centro,listatrozos);
@@ -143,7 +149,7 @@ while pasosactivos<5
         end
         
         % Fija los que parecen correctos (usa fijos_old para que solo se
-        % fije un escalón por iteración). Además anula los que podrían
+        % fije un escalï¿½n por iteraciï¿½n). Ademï¿½s anula los que podrï¿½an
         % estar mejor y tienen bajo ratioprobs (paso 4)
         if pasosactivos>=3 && trozo2pez(c_trozos)>0 && posibles(trozo2pez(c_trozos))
             mejorpez=[];
@@ -192,11 +198,11 @@ while pasosactivos<5
 end % while hay nuevos fijos
 
 
-% % Ahora quedan los conflictivos. Estos los recorre de menos a más probable,
+% % Ahora quedan los conflictivos. Estos los recorre de menos a mï¿½s probable,
 % % corrigiendo cuando hay un encaje mejor. Lo hace en dos pasos: En el
 % % primer paso, si hay un encaje mejor pero hay otro trozo asignado a su pez
 % % preferido, simplemente quita la identidad. Si todo va bien, en el segundo
-% % paso el otro pez habrá cambiado también su identidad, y podremos
+% % paso el otro pez habrï¿½ cambiado tambiï¿½n su identidad, y podremos
 % % reasignarlo.
 % sum(fijos)
 % quedan=find(~fijos & asignados);
@@ -212,7 +218,7 @@ end % while hay nuevos fijos
 % %     mejorpez=NaN(1,2);
 %     [m,mejorpez(1)]=min(velanterior(c_trozos,:));
 %     if ~fijos(trozoanterior(c_trozos,mejorpez(1)))
-%         mejorpez(1)=NaN; % Si no está fijo, lo anulamos
+%         mejorpez(1)=NaN; % Si no estï¿½ fijo, lo anulamos
 %     end
 %     [m,mejorpez(2)]=min(velsiguiente(c_trozos,:));
 %     if ~fijos(trozosiguiente(c_trozos,mejorpez(2)))
@@ -251,7 +257,7 @@ end % while hay nuevos fijos
 %         otrotrozo=find(conviven(c_trozos,:) & trozo2pez'==ind_mejor);
 %         if isempty(otrotrozo)
 %             trozo2pez(c_trozos)=ind_mejor;
-%             disp(['Trozo ' num2str(c_trozos) ' reasignado sin más'])
+%             disp(['Trozo ' num2str(c_trozos) ' reasignado sin mï¿½s'])
 %             c_cambiados=c_cambiados+1;
 %             cambiados(c_cambiados,1)=c_trozos;
 %         elseif probtrozos_relac(otrotrozo)<.9

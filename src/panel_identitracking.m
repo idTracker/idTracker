@@ -1,39 +1,39 @@
 % 21-Jul-2014 22:41:32 / en vez de \
-% 29-Apr-2014 10:30:41 Elimino la encriptación
-% 07-Apr-2014 10:42:29 Añado la búsqueda de nueva versión
+% 29-Apr-2014 10:30:41 Elimino la encriptaciï¿½n
+% 07-Apr-2014 10:42:29 Aï¿½ado la bï¿½squeda de nueva versiï¿½n
 % 04-Feb-2014 15:24:01 Antes de "guarda copia", he hecho que funcione con
-% el antigou ginput si la versión de matlab es antigua. Además, añado
-% "soloreferencias" al menú "Advanced"
+% el antigou ginput si la versiï¿½n de matlab es antigua. Ademï¿½s, aï¿½ado
+% "soloreferencias" al menï¿½ "Advanced"
 % 21-Dec-2013 13:21:56 Hago que guarde obj en datos para no tener que
-% reabrir el archivo de vídeo si no es necesario
-% 12-Dec-2013 15:40:41 Hago que use VideoReader si la versión es reciente
-% 04-Dec-2013 19:10:48 Añado h_ocupado para que los callbacks "pidan la
+% reabrir el archivo de vï¿½deo si no es necesario
+% 12-Dec-2013 15:40:41 Hago que use VideoReader si la versiï¿½n es reciente
+% 04-Dec-2013 19:10:48 Aï¿½ado h_ocupado para que los callbacks "pidan la
 % vez"
-% 25-Nov-2013 17:48:15 Paso de trayectorias a trajectories. Añado lo de
-% importar datos de otros vídeos (el 4 de diciembre).
+% 25-Nov-2013 17:48:15 Paso de trayectorias a trajectories. Aï¿½ado lo de
+% importar datos de otros vï¿½deos (el 4 de diciembre).
 % 25-Nov-2013 10:38:53 Quito la ventanita "Start in frame"
 % 22-Nov-2013 18:20:22 Cambio "identitraquinator" por "idTracker", y otros
-% lamentables cambios para que quede más serio.
-% 20-Nov-2013 08:46:14 Anulo el menú "Advanced" para la versión compilada
+% lamentables cambios para que quede mï¿½s serio.
+% 20-Nov-2013 08:46:14 Anulo el menï¿½ "Advanced" para la versiï¿½n compilada
 % del paper.
-% 14-Nov-2013 12:15:06 Añado el menú "Advanced", y preparo para que pueda
-% seleccionarse una zona concreta para la normalización de la intensidad
+% 14-Nov-2013 12:15:06 Aï¿½ado el menï¿½ "Advanced", y preparo para que pueda
+% seleccionarse una zona concreta para la normalizaciï¿½n de la intensidad
 % 08-Sep-2013 17:04:57 Nada.
 % 06-Sep-2013 12:42:21 Hago que el ginput para el ROI vaya de punto en
 % punto.
-% 25-Aug-2013 19:16:15 Hago que el comportamiento del botón ROI cambie
+% 25-Aug-2013 19:16:15 Hago que el comportamiento del botï¿½n ROI cambie
 % cuando ya se definido antes algo.
-% 04-Jul-2013 20:51:42 Añado n_procesadores
-% 31-May-2013 20:53:26 Añado encriptación
-% 25-Apr-2013 16:51:09 Añado Trueno
+% 04-Jul-2013 20:51:42 Aï¿½ado n_procesadores
+% 31-May-2013 20:53:26 Aï¿½ado encriptaciï¿½n
+% 25-Apr-2013 16:51:09 Aï¿½ado Trueno
 % 19-Apr-2013 17:43:39 Hago que reutilice lo que pueda
-% 10-Apr-2013 16:14:23 Evito que falle cuando se pide un frame que se pasa de rango. Además añado el intervalo
+% 10-Apr-2013 16:14:23 Evito que falle cuando se pide un frame que se pasa de rango. Ademï¿½s aï¿½ado el intervalo
 % 19-Feb-2013 15:23:22 Hago que pueda reutilizar parte de segm
 % 18-Feb-2013 10:30:26 Hago que pueda reutilizar los trozos
 % 27-Nov-2012 18:36:18 Cambio el formato de reutiliza
 % APE 21 nov 12
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pï¿½rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cientï¿½ficas
 
 function [datosegm,h]=panel_identitracking(datosegm)
 
@@ -101,7 +101,7 @@ h.boton_saveandexit=uicontrol('Style','pushbutton','Units','normalized','Positio
 textos={'Number of individuals','Intensity threshold','Minimum size','Resolution reduction','Remove background','Invert contrast','Interval','# of frames for refs.','roi','Segmentation only','# of processors'};
 campos={'n_peces','umbral','umbral_npixels','reduceresol','limpiamierda','cambiacontraste','interval','nframes_refs','roi','trueno','n_procesadores'};
 % pordefecto=[8 .85 200 1 1 0];
-tipos=[1 1 1 1 2 2 1 1 3 2 1]; % 1 significa 'text', 2 significa 'checkbox', 3 significa que es la línea de botones del ROI
+tipos=[1 1 1 1 2 2 1 1 3 2 1]; % 1 significa 'text', 2 significa 'checkbox', 3 significa que es la lï¿½nea de botones del ROI
 n_campos=length(campos);
 for c_campos=1:n_campos
     switch tipos(c_campos)
@@ -147,7 +147,7 @@ end % c_pasos
 set(h.Trozos,'String','Fragments')
 set(h.FillGaps,'String','Est. during crossings')
 % datos.obj=cell(1,size(datosegm.archivo2frame,1));
-% Comprueba si hay que crear el objeto vídeo de nuevo
+% Comprueba si hay que crear el objeto vï¿½deo de nuevo
 crearobj=true;
 if isfield(datosegm,'obj') && ~isempty(datosegm.obj) && ~isempty(datosegm.obj{1})
     try a=get(datosegm.obj{1}); crearobj=false; catch; end
@@ -170,7 +170,8 @@ end % if hay que crear el objeto de nuevo
 datos.videoabierto=1;
 frame=read(datosegm.obj{1},1);
 if size(frame,3)==3
-    frame=rgb2gray(frame);
+    frame=colour_filter(frame);
+    frame=rgb2gray(frame);%Daniel
 end
 datos.frame=frame;
 datos.ind_frame=1;
@@ -180,11 +181,11 @@ datos.ind_frame=1;
 h.ejes=axes('Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2 1-margen_vert-alto_ejes ancho_ejes alto_ejes]);
 h.frame=imagesc(zeros(datosegm.tam));
 hold(h.ejes,'on')
-% h.ocupado se usará para que las funciones se den la vez. Cada elemento
-% corresponde a una función, con el orden
+% h.ocupado se usarï¿½ para que las funciones se den la vez. Cada elemento
+% corresponde a una funciï¿½n, con el orden
 % [actualiza redibuja clicreutiliza calculavideomedio cogezona borramascara importaparametros empiezatracking]
-% Cada función sólo puede empezar cuando h.ocupado es cero para todas las
-% demás funciones
+% Cada funciï¿½n sï¿½lo puede empezar cuando h.ocupado es cero para todas las
+% demï¿½s funciones
 % h.ocupado=plot(ones(1,8),NaN(1,8),'Visible','off');
 % h.text_frame=uicontrol('Style','text','Units','normalized','Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2+ancho_nmanchas 1-margen_vert-alto_ejes-sep_vert3-alto_textos ancho_edits alto_textos],'FontSize',tam_letras,'String','Current frame','BackgroundColor',color_fondo,'ForeGroundcolor',[0 0 0]);
 h.text_frame=uicontrol('Style','text','Units','normalized','Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2 1-margen_vert-alto_ejes-sep_vert3-alto_textos ancho_nmanchas alto_textos],'String','Current frame','BackgroundColor',color_fondo,'FontSize',tam_letras,'Enable','off','UserData',datosobj_on);
@@ -255,7 +256,7 @@ datos.datosegm=datosegm;
 datos.campos=campos;
 
 
-% Comprueba si hay una nueva versión
+% Comprueba si hay una nueva versiï¿½n
 datos.texto_version='';
 try    
     texto=urlread('https://drive.google.com/uc?export=download&id=0B-Ne02D-easKTFZXQjRiSzNibFU');
@@ -310,7 +311,7 @@ function actualiza(uno,dos,h)
 % ind_funcion=1;
 % ocupado=get(h.ocupado,'XData');
 % ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
-% while any(ocupado)==1 % Si está ocupado, espera a que se desocupe
+% while any(ocupado)==1 % Si estï¿½ ocupado, espera a que se desocupe
 %     pause(.1)
 %     ocupado=get(h.ocupado,'XData');
 %     ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
@@ -326,14 +327,14 @@ for c_campos=1:length(datos.campos)
     if isfield(h,datos.campos{c_campos})
         if strcmpi(get(h.(datos.campos{c_campos}),'Style'),'edit')
             texto=get(h.(datos.campos{c_campos}),'String');
-            texto(texto=='-')=' '; % Cambia el guión por espacio en el intervalo. Luego, str2num interpretará el espacio como separación entre los dos elementos
+            texto(texto=='-')=' '; % Cambia el guiï¿½n por espacio en el intervalo. Luego, str2num interpretarï¿½ el espacio como separaciï¿½n entre los dos elementos
             datos.datosegm.(datos.campos{c_campos})=str2num(texto);             %#ok<ST2NM>
         elseif strcmpi(get(h.(datos.campos{c_campos}),'Style'),'checkbox')
             datos.datosegm.(datos.campos{c_campos})=get(h.(datos.campos{c_campos}),'Value');
         end
     end
 end % c_campos
-% Si hace falta, rehace la segmentación
+% Si hace falta, rehace la segmentaciï¿½n
 % if any(uno==[h.umbral h.umbral_npixels h.cambiacontraste h.limpiamierda h.edit_frame -1]) % -1 significa que viene de importar datos
 %     datos.cambios.segmentacion=true;
 % end
@@ -341,7 +342,7 @@ if uno==h.interval || uno==-1 % -1 significa que viene de importar datos
     inicioborrar=2; % Si cambia el intervalo, hay que rehacer el background
     datos.datosegm.reutiliza.Background=false;
 elseif any(uno==[h.umbral h.umbral_npixels h.reduceresol h.limpiamierda h.cambiacontraste])    
-    inicioborrar=3; % El background puede sobrevivir, sólo hay que rehacerlo si cambia el ROI.
+    inicioborrar=3; % El background puede sobrevivir, sï¿½lo hay que rehacerlo si cambia el ROI.
 elseif any(uno==[h.n_peces])
     inicioborrar=4; % A partir de individualization
 elseif any(uno==[h.nframes_refs])
@@ -388,7 +389,7 @@ for c_pasos=3:length(pasos) % El primero es datosegm, y el segundo Background
     end
     datos.datosegm.reutiliza.(pasos{c_pasos})=get(h.(pasos{c_pasos}),'Value');
 end
-% Controla visibilidad del botón para calcular el videomedio
+% Controla visibilidad del botï¿½n para calcular el videomedio
 if datos.datosegm.limpiamierda
     set(h.push_videomedio,'Visible','on')
     if isfield(datos.datosegm,'videomedio') && ~isempty(datos.datosegm.videomedio) && datos.datosegm.reutiliza.Background
@@ -413,7 +414,7 @@ function redibuja(uno,dos,h)
 % ind_funcion=2;
 % ocupado=get(h.ocupado,'XData');
 % ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
-% while any(ocupado)==1 % Si está ocupado, espera a que se desocupe
+% while any(ocupado)==1 % Si estï¿½ ocupado, espera a que se desocupe
 %     pause(.1)
 %     ocupado=get(h.ocupado,'XData');
 %     ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
@@ -430,7 +431,7 @@ if datos.ind_frame~=str2double(get(h.edit_frame,'String'))
         set(h.edit_frame,'String',num2str(datos.ind_frame))
     end
     archivo_act=datos.datosegm.frame2archivovideo(datos.ind_frame,1);
-    % Comprueba si hay que crear el objeto vídeo
+    % Comprueba si hay que crear el objeto vï¿½deo
     crearobj=true;
     if isfield(datos.datosegm,'obj') && ~isempty(datos.datosegm.obj{archivo_act})
         try a=get(datos.datosegm.obj{archivo_act}); crearobj=false; catch; end
@@ -453,7 +454,8 @@ if datos.ind_frame~=str2double(get(h.edit_frame,'String'))
     end
     frame=read(datos.datosegm.obj{archivo_act},datos.datosegm.frame2archivovideo(datos.ind_frame,2));
     if size(frame,3)==3
-        frame=rgb2gray(frame);    
+        frame=colour_filter(frame);
+        frame=rgb2gray(frame);%Daniel    
     end
     datos.frame=frame;
 end
@@ -476,7 +478,7 @@ end
 % if datos.cambios.frame
     set(h.frame,'CData',frame)
 %     datos.cambios.frame=false; 
-    % Cambio el orden de los children del colorbar, para que la línea siempre quede por encima.
+    % Cambio el orden de los children del colorbar, para que la lï¿½nea siempre quede por encima.
     drawnow % Para que se actualicen los handles
 hijos=get(h.colorbar,'Children');
 lineaumbral=find(hijos==h.lineaumbral);
@@ -510,7 +512,7 @@ set(h.colorbar,'Children',hijos)
 %     datos.cambios.mascara=false;
 % end
 
-% Controla el aspecto del botón de ROI
+% Controla el aspecto del botï¿½n de ROI
 if any(~datos.datosegm.mascara(:))
     set(h.push_roi,'String','Include region')
 else
@@ -527,7 +529,7 @@ function clicreutiliza(uno,dos,h)
 % ind_funcion=3;
 % ocupado=get(h.ocupado,'XData');
 % ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
-% while any(ocupado)==1 % Si está ocupado, espera a que se desocupe
+% while any(ocupado)==1 % Si estï¿½ ocupado, espera a que se desocupe
 %     pause(.1)
 %     ocupado=get(h.ocupado,'XData');
 %     ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
@@ -536,7 +538,7 @@ function clicreutiliza(uno,dos,h)
 % set(h.ocupado,'XData',ocupado); drawnow % Coge la vez
 reactiva(0,h)
 datos=guidata(h.fig);
-if uno==h.datosegm % Si no viene del botón, estamos simplemente comprobando si hay algo reutilizable con el datosegm que ya tenemos.
+if uno==h.datosegm % Si no viene del botï¿½n, estamos simplemente comprobando si hay algo reutilizable con el datosegm que ya tenemos.
     load([datos.datosegm.directorio 'datosegm'])
     datosegm=variable;
     datos.datosegm=datosegm;
@@ -585,7 +587,7 @@ function calculavideomedio(uno,dos,h)
 % ind_funcion=4;
 % ocupado=get(h.ocupado,'XData');
 % ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
-% while any(ocupado)==1 % Si está ocupado, espera a que se desocupe
+% while any(ocupado)==1 % Si estï¿½ ocupado, espera a que se desocupe
 %     pause(.1)
 %     ocupado=get(h.ocupado,'XData');
 %     ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
@@ -611,7 +613,7 @@ function cogezona(uno,dos,h)
 % ind_funcion=5;
 % ocupado=get(h.ocupado,'XData');
 % ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
-% while any(ocupado)==1 % Si está ocupado, espera a que se desocupe
+% while any(ocupado)==1 % Si estï¿½ ocupado, espera a que se desocupe
 %     pause(.1)
 %     ocupado=get(h.ocupado,'XData');
 %     ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
@@ -761,7 +763,7 @@ function borramascara(uno,dos,h)
 % ind_funcion=6;
 % ocupado=get(h.ocupado,'XData');
 % ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
-% while any(ocupado)==1 % Si está ocupado, espera a que se desocupe
+% while any(ocupado)==1 % Si estï¿½ ocupado, espera a que se desocupe
 %     pause(.1)
 %     ocupado=get(h.ocupado,'XData');
 %     ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
@@ -798,7 +800,7 @@ function importaparametros(uno,dos,h)
 % ind_funcion=7;
 % ocupado=get(h.ocupado,'XData');
 % ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
-% while any(ocupado)==1 % Si está ocupado, espera a que se desocupe
+% while any(ocupado)==1 % Si estï¿½ ocupado, espera a que se desocupe
 %     pause(.1)
 %     ocupado=get(h.ocupado,'XData');
 %     ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
@@ -861,7 +863,7 @@ function empiezatracking(uno,dos,h)
 % ind_funcion=8;
 % ocupado=get(h.ocupado,'XData');
 % ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma
-% while any(ocupado)==1 % Si está ocupado, espera a que se desocupe
+% while any(ocupado)==1 % Si estï¿½ ocupado, espera a que se desocupe
 %     pause(.1)
 %     ocupado=get(h.ocupado,'XData');
 %     ocupado(ind_funcion)=0; % Ignora el valor que corresponde a ella misma

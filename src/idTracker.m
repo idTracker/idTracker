@@ -25,9 +25,9 @@
 % 20-Dec-2013 20:07:17 Hago que por defecto identifique un m�ximo de 1000
 % frames por trozo. Adem�s, hago que por defecto rechaze frames en los que
 % haya m�s de 2*n_peces manchas.
-% 12-Dec-2013 20:01:21 Hago que muestre el n�mero de procesadores que est�
+% 12-Dec-2013 20:01:21 Hago que muestre el número de procesadores que est�
 % usando realmente
-% 12-Dec-2013 15:37:42 Hago que guarde la versi�n de Matlab para elegir
+% 12-Dec-2013 15:37:42 Hago que guarde la versión de Matlab para elegir
 % entre mmreader y VideoReader
 % 02-Dec-2013 19:10:14 Hago que encripte autom�ticamente si no hay
 % argumentos de entrada

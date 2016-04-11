@@ -63,11 +63,12 @@ n_distintos=sum(trozos>0,2);
 %     end
 % end
 n_distintos=sum(trozos>0,2);
-framestodos=find(n_distintos==n_peces);
+framestodos=find(n_distintos>0);
 grupostrozos=NaN(length(framestodos),n_peces);
 c_grupos=0;
 for c_frames=framestodos(:)'
      trozos_act=sort(trozos(c_frames,1:n_peces));
+%      trozos_act(trozos_act==0)=[];
      if c_grupos==0 || any(grupostrozos(c_grupos,:)~=trozos_act)
          c_grupos=c_grupos+1;
          grupostrozos(c_grupos,:)=trozos_act;
@@ -76,6 +77,7 @@ end % c_frames
 grupostrozos=grupostrozos(1:c_grupos,:);
 
 trozosbuenos=sort(unique(grupostrozos(:)));
+trozosbuenos(trozosbuenos==0)=[];
 trozo2nfbuenos=NaN(1,max(trozos(:)));
 manchasbuenas=false(size(trozos));
 % Busca frames v�lidos y no demasiado solapantes en cada trozo
@@ -109,7 +111,11 @@ for c_trozos=trozosbuenos(:)'
 %             keyboard
 %         end
     end
+    try
     trozo2nfbuenos(c_trozos)=sum(manchasbuenas(ind));
+    catch
+        keyboard
+    end
 end
 
 intervalosbuenos.grupostrozos=grupostrozos;

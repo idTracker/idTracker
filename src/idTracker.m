@@ -1,115 +1,117 @@
+% 09-Oct-2015 10:26:14 Nada.
 % 21-Jul-2014 22:38:46 Hago que funcione en mac y linux (/ en vez de \)
 % 15-Jul-2014 18:09:12 Separo las trayectorias en trajectories y
 % trajectories_nogaps
-% 29-Apr-2014 08:59:03 Elimino la encriptaci�n
-% 17-Mar-2014 11:19:29 Limpieza y reorganizaci�n general. Cambio
+% 29-Apr-2014 08:59:03 Elimino la encriptación
+% 17-Mar-2014 11:19:29 Limpieza y reorganización general. Cambio
 % getComputerName por leer directamente el hostname
-% 13-Mar-2014 10:26:49 Hago que guarde m�s a menudo datosegm (para que se
+% 13-Mar-2014 10:26:49 Hago que guarde más a menudo datosegm (para que se
 % guarden los tiempos)
-% 15-Feb-2014 13:54:51 A�ado la resegmentaci�n
+% 15-Feb-2014 13:54:51 Añado la resegmentación
 % 07-Feb-2014 09:34:22 Hago que guarde los tiempos
-% 04-Feb-2014 15:13:59 Hago que pueda quedarse justo despu�s de calcular
+% 04-Feb-2014 15:13:59 Hago que pueda quedarse justo después de calcular
 % referencias
-% 02-Feb-2014 20:02:11 A�ado el c�lculo de ramificaciones para tener en
+% 02-Feb-2014 20:02:11 Añado el cálculo de ramificaciones para tener en
 % cuenta los trozos a los que ha podido ir un pez en cada momento. REVIERTO
 % PARCIALMENTE: Lo dejo preparado, pero desactivado. Porque tampoco
-% funciona demasiado bien, y me da miedo que sea m�s impredecible.
-% 08-Jan-2014 11:15:14 Hago que abra matlabpool aunque s�lo se quiera 1
-% procesador. Adem�s no abre matlabpool si ya est� abierto con el n�mero de
+% funciona demasiado bien, y me da miedo que sea más impredecible.
+% 08-Jan-2014 11:15:14 Hago que abra matlabpool aunque sólo se quiera 1
+% procesador. Además no abre matlabpool si ya está abierto con el número de
 % procesadores adecuado.
-% 04-Jan-2014 21:32:13 A�ado el rec�lculo de tam_mapas si es necesario
-% 22-Dec-2013 02:23:38 Hago que vaya m�s r�pido si hay un solo bicho
+% 04-Jan-2014 21:32:13 Añado el recálculo de tam_mapas si es necesario
+% 22-Dec-2013 02:23:38 Hago que vaya más rápido si hay un solo bicho
 % 21-Dec-2013 12:48:19 Cambio raizarchivos por nombrearchivo, para poder
-% incluir la extensi�n
-% 21-Dec-2013 11:51:49 Cambios est�ticos sobre todo
-% 20-Dec-2013 20:07:17 Hago que por defecto identifique un m�ximo de 1000
-% frames por trozo. Adem�s, hago que por defecto rechaze frames en los que
-% haya m�s de 2*n_peces manchas.
-% 12-Dec-2013 20:01:21 Hago que muestre el número de procesadores que est�
+% incluir la extensión
+% 21-Dec-2013 11:51:49 Cambios estéticos sobre todo
+% 20-Dec-2013 20:07:17 Hago que por defecto identifique un máximo de 1000
+% frames por trozo. Además, hago que por defecto rechaze frames en los que
+% haya más de 2*n_peces manchas.
+% 12-Dec-2013 20:01:21 Hago que muestre el número de procesadores que está
 % usando realmente
 % 12-Dec-2013 15:37:42 Hago que guarde la versión de Matlab para elegir
 % entre mmreader y VideoReader
-% 02-Dec-2013 19:10:14 Hago que encripte autom�ticamente si no hay
+% 02-Dec-2013 19:10:14 Hago que encripte automáticamente si no hay
 % argumentos de entrada
-% 01-Dec-2013 10:25:32 Hago que las trayectorias se guarden tambi�n en el
-% directorio del v�deo, y mejoro el mensaje de despedida.
+% 01-Dec-2013 10:25:32 Hago que las trayectorias se guarden también en el
+% directorio del vídeo, y mejoro el mensaje de despedida.
 % 29-Nov-2013 10:04:14 Hago que por defecto sean 5 individuos.
-% 29-Nov-2013 08:20:35 Hago que los errores salgan m�s elegantemente.
-% Adem�s cambio la fecha en datosegm.version (esto deber�a hacerlo m�s a
+% 29-Nov-2013 08:20:35 Hago que los errores salgan más elegantemente.
+% Además cambio la fecha en datosegm.version (esto debería hacerlo más a
 % menudo)
 % 28-Nov-2013 20:33:03 Hago que muestre un aviso al terminar
 % 25-Nov-2013 17:46:17 Paso de trayectorias a trajectories, en incoroporo
-% la transformaci�n a txt.
+% la transformación a txt.
 % 22-Nov-2013 18:18:55
 % 05-Nov-2013 14:54:18 Revierto al sistema de referencias antiguo
 % 25-Sep-2013 21:26:12 Meto el nuevo sistema de referencias
 % 19-Jul-2013 16:08:12 Hago que se pueda forzar que coja referencias
 % incluso cuando hay un solo pez
-% 04-Jul-2013 20:50:02 Hago que se pueda controlar el n�mero de procesadores
-% 18-Jun-2013 19:22:53 A�ado mancha2centro
+% 04-Jul-2013 20:50:02 Hago que se pueda controlar el número de procesadores
+% 18-Jun-2013 19:22:53 Añado mancha2centro
 % 10-Jun-2013 14:41:27
-% 08-Jun-2013 22:07:07 A�ado el fichero de log
-% 31-May-2013 20:49:35 A�ado la posibilidad de encriptar los archivos
-% 31-May-2013 16:22:41 Hago que pueda funcionar sin entradas (para la versi�n compilada)
-% 28-May-2013 19:35:30 A�ado la opci�n de s�lo calcular el datosegm b�sico. Adem�s cambio la salida, de trayectorias a datosegm
-% 09-May-2013 09:56:22 Hago que cuando est� activo empezarsinmas reutilice todo por defecto (a menos que empezarsinmas sea 2)
-% 30-Apr-2013 11:37:33 Hago que s�lo reutilice las detecci�n de manchas individuales si encuentra indiv
-% Adem�s, hago que no abra matlabpool si est� en Trueno
+% 08-Jun-2013 22:07:07 Añado el fichero de log
+% 31-May-2013 20:49:35 Añado la posibilidad de encriptar los archivos
+% 31-May-2013 16:22:41 Hago que pueda funcionar sin entradas (para la versión compilada)
+% 28-May-2013 19:35:30 Añado la opción de sólo calcular el datosegm básico. Además cambio la salida, de trayectorias a datosegm
+% 09-May-2013 09:56:22 Hago que cuando está activo empezarsinmas reutilice todo por defecto (a menos que empezarsinmas sea 2)
+% 30-Apr-2013 11:37:33 Hago que sólo reutilice las detección de manchas individuales si encuentra indiv
+% Además, hago que no abra matlabpool si está en Trueno
 % 26-Apr-2013 17:40:24 Hago que calcule trozos antes de buscar manchas
 % individuales (lo hago para poder borrar segm.pixels cuando subo datos a
 % Trueno)
-% 25-Apr-2013 17:33:02 A�ado Trueno
-% 17-Apr-2013 11:58:53 A�ado la opci�n "save & exit"
-% 10-Apr-2013 16:40:53 A�ado la posibilidad de traquear s�lo un intervalo
-% 28-Feb-2013 12:01:04 A�ado el detector de blanco y negro o color
+% 25-Apr-2013 17:33:02 Añado Trueno
+% 17-Apr-2013 11:58:53 Añado la opción "save & exit"
+% 10-Apr-2013 16:40:53 Añado la posibilidad de traquear sólo un intervalo
+% 28-Feb-2013 12:01:04 Añado el detector de blanco y negro o color
 % 18-Feb-2013 10:51:00 Hago que pueda reutilizar trozos
-% 11-Feb-2013 18:09:13 Hago que pixelsmierda pueda calcularse con el m�todo de contar frames
-% 24-Jan-2013 12:55:36 Actualizo a la nueva versi�n de solapamiento2trozos
+% 11-Feb-2013 18:09:13 Hago que pixelsmierda pueda calcularse con el método de contar frames
+% 24-Jan-2013 12:55:36 Actualizo a la nueva versión de solapamiento2trozos
 % 27-Nov-2012 18:43:13 Cambio el formato de reutiliza
-% 23-Nov-2012 14:36:50 Integro el panel. Adem�s, hago que pueda meterse datosegm como �nico argumento de entrada.
-% Adem�s, reorganizo para que cosas como npixels se calculen al hacer la segmentaci�n, y reordeno para que est�n
-% m�s claros los pasos que pueden reutilizarse.
+% 23-Nov-2012 14:36:50 Integro el panel. Además, hago que pueda meterse datosegm como único argumento de entrada.
+% Además, reorganizo para que cosas como npixels se calculen al hacer la segmentación, y reordeno para que estén
+% más claros los pasos que pueden reutilizarse.
 % 23-Nov-2012 08:47:37 Quito cambiacontraste de la llamada a datosegm2segms
-% 21-Nov-2012 15:15:36 Meto el panel. Adem�s reorganizo varias cosas. Quito el c�digo que correspond�a al caso de meter
-% el v�deo ya segmentado (de todos modos ese c�digo era antiguo y probablemente ya no funcionar�a)
-% 16-Nov-2012 14:28:25 Hago que se pueda elegir entre adquisici�n de referencias antigua o nueva.
-% 18-Oct-2012 14:44:33 A�ado el panel de control
+% 21-Nov-2012 15:15:36 Meto el panel. Además reorganizo varias cosas. Quito el código que correspondía al caso de meter
+% el vídeo ya segmentado (de todos modos ese código era antiguo y probablemente ya no funcionaría)
+% 16-Nov-2012 14:28:25 Hago que se pueda elegir entre adquisición de referencias antigua o nueva.
+% 18-Oct-2012 14:44:33 Añado el panel de control
 % 03-Oct-2012 18:49:01 Cambio de excluyezona_intensmed a mascara_intensmed
-% 19-Sep-2012 11:31:58 Hago que funcione mejor para v�deos de un solo pez.
-% Salta la clasificaci�n de manchas individuales, y no hace la
-% identificaci�n usando los mapas.
-% 31-Jul-2012 09:28:59 A�ado la posibilidad de excluir una zona para el
-% c�lculo de intensmed
+% 19-Sep-2012 11:31:58 Hago que funcione mejor para vídeos de un solo pez.
+% Salta la clasificación de manchas individuales, y no hace la
+% identificación usando los mapas.
+% 31-Jul-2012 09:28:59 Añado la posibilidad de excluir una zona para el
+% cálculo de intensmed
 % 26-Jul-2012 20:50:24 Hago que vuelva a usar las versiones antiguas de
 % datosegm2referencias y datosegm2intervalosbuenos
-% 26-Jul-2012 20:39:39 A�ado el tama�o m�ximo de manchas
-% 23-Jul-2012 20:42:13 A�ado el limpiador de mierda
+% 26-Jul-2012 20:39:39 Añado el tamaño máximo de manchas
+% 23-Jul-2012 20:42:13 Añado el limpiador de mierda
 % 27-Jun-2012 19:35:36 Hago que pueda funcionar con referencias externas
 % 01-Jun-2012 18:51:26 Intento mejorar la eficiencia en el uso de memoria
 % 19-May-2012 11:20:21 Hago que pueda reutilizar las refs. individuales.
 % 08-May-2012 19:26:00 Modificaciones menores.
-% 13-Mar-2012 20:10:03 Incluyo la comprobaci�n de n�mero de peces en cada
+% 13-Mar-2012 20:10:03 Incluyo la comprobación de número de peces en cada
 % mancha
 % 08-Mar-2012 21:07:11 Actualizo, metiendo todos los cambios que he metido
 % en identitracking_refsexternas.
-% 22-Feb-2012 19:22:25 A�ado la posibilidad de invertir el contraste
+% 22-Feb-2012 19:22:25 Añado la posibilidad de invertir el contraste
 % 26-Jan-2012 17:50:16 De momento, nada.
-% 06-Dec-2011 11:23:43 A�ado matriznoson
-% 18-Nov-2011 14:36:36 A�ado roi
-% 10-Nov-2011 17:59:50 Cambio a la nueva segmentaci�n en la que s�lo tiene
+% 06-Dec-2011 11:23:43 Añado matriznoson
+% 18-Nov-2011 14:36:36 Añado roi
+% 10-Nov-2011 17:59:50 Cambio a la nueva segmentación en la que sólo tiene
 % en cuenta la diferencia con el videomedio
-% 14-Oct-2011 17:55:14 Cambio el c�lculo de las probabilidades de error.
+% 14-Oct-2011 17:55:14 Cambio el cálculo de las probabilidades de error.
 % APE 11 oct 11 Viene de identitracking_masdedos
 
-% (C) 2014 Alfonso P�rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cient�ficas
+% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
 
 % umbral=-1 significa que se ajusta manualmente.
-% raizarchivos=[] significa que ya est� hecha la segmentaci�n, y buscar�
+% raizarchivos=[] significa que ya está hecha la segmentación, y buscará
 % datosegm.
 %
-% mascara_intensmed debe ser una matriz l�gica del mismo tama�o que los
-% frames, con unos en la regi�n de la que se quiere sacar la intensidad
-% media. Si se deja vac�a, al final se coger� la roi.
+% mascara_intensmed debe ser una matriz lógica del mismo tamaño que los
+% frames, con unos en la región de la que se quiere sacar la intensidad
+% media. Si se deja vacía, al final se cogerá la roi.
+ 
 
 
 function datosegm=idTracker(directorio,nombrearchivo,directorio_destino,n_peces,umbral,reutiliza,roi,cambiacontraste,referencias,mascara_intensmed,solodatosegm)

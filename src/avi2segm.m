@@ -1,7 +1,7 @@
-% 01-Feb-2014 11:18:47 Cambio la definici�n de centroide, ahora es el
-% centro del conjunto de pixels m�s alejados de los bordes
-% 21-Dec-2013 14:35:22 Mejoras de eficiencia, y paralelizaci�n
-% 20-Dec-2013 20:12:55 Introduzco el n�mero m�ximo de manchas.
+% 01-Feb-2014 11:18:47 Cambio la definición de centroide, ahora es el
+% centro del conjunto de pixels más alejados de los bordes
+% 21-Dec-2013 14:35:22 Mejoras de eficiencia, y paralelización
+% 20-Dec-2013 20:12:55 Introduzco el número máximo de manchas.
 % 13-Aug-2013 12:03:26 Anulo la parte en la que no se usa datosegm.mascara
 % 10-Apr-2013 17:26:34 Incorporo la posibilidad de que no se haga la segmentaci�n de todos los frames (o de ninguno), para los casos en los que s�lo se traquea un intervalo
 % 27-Feb-2013 20:03:03 Me doy cuenta de que la mediana tarda much�simo m�s que la media, y es lo que m�s est� tardando de la segmentaci�n. As� que pongo otra vez media para la normalizaci�n de intensidades.

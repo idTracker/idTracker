@@ -11,4 +11,5 @@ function idTracker_batch(path_to_datosegm)
 
 load(path_to_datosegm)
 datosegm=variable;
+datosegm.empezarsinmas=true;
 idTracker(datosegm)

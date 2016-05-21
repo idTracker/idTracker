@@ -38,7 +38,7 @@
 function [datosegm,h]=panel_identitracking(datosegm)
 
 menuadvanced=~datosegm.encriptar;
-if ~isempty(dir('.\advanced.txt'))
+if ~isempty(dir(['.' filesep 'advanced.txt']))
     menuadvanced=true;
 end
 if ~isfield(datosegm,'mascara')
@@ -809,22 +809,18 @@ reactiva(0,h)
 datos=guidata(h.fig);
 directorio=ultimodir;
 [nombrearchivo,directorio]=uigetfile('*.avi','Select video file from which tracking parameters are to be borrowed',directorio);
-if ispc
-    barra='\';
-else
-    barra='/';
-end
-if directorio(end)~=barra
-    directorio(end+1)=barra;
+
+if directorio(end)~=filesep
+    directorio(end+1)=filesep;
 end
 ultimodir(directorio);
-if ~isempty(dir([directorio 'segm\datosegm.mat']))
-   load([directorio 'segm\datosegm.mat'])
+if ~isempty(dir([directorio 'segm' filesep 'datosegm.mat']))
+   load([directorio 'segm' filesep 'datosegm.mat'])
    if isstruct(variable)
        datosegm=variable;
        clear variable
    else
-       datosegm=load_encrypt([directorio 'segm\datosegm.mat'],1);
+       datosegm=load_encrypt([directorio 'segm' filesep 'datosegm.mat'],1);
    end
    % Primero los campos que se ven en el panel
    for c_campos=1:length(datos.campos)       

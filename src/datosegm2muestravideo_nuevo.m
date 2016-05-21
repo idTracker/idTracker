@@ -1,3 +1,4 @@
+% 21-May-2016 10:13:45 Improve compatibility using filesep
 % 21-Jul-2014 22:39:43 / en vez de \
 % 16-Apr-2014 17:07:20 Añado la posibilidad de cortar trozos
 % 21-Mar-2014 09:13:16 Quito lo de ir al siguiente cruce del individuo
@@ -32,15 +33,9 @@ function datosegm2muestravideo_nuevo(datosegm,obj)
 
 datos.corrigeinterpolacion=false;
 
-if ispc
-    barra='\';
-else
-    barra='/';
-end
-
 if nargin<1 || isempty(datosegm)
     directorio=ultimodir;
-    if ~isempty(directorio) && directorio(end)==barra
+    if ~isempty(directorio) && directorio(end)==filesep
         directorio=directorio(1:end-1); % Necesario para que funcione bien el uigetfile cuando el nombre del directorio tiene un espacio al final
     end
    [nombrearchivo,directorio]=uigetfile('*.*','Select video file',directorio); 
@@ -48,8 +43,8 @@ if nargin<1 || isempty(datosegm)
        directorio=[directorio(1:end-1) ' ' directorio(end)]; % Esto hace falta en los vídeos de Pierre, porque se come el último espacio
    end
    ultimodir(directorio);
-   if directorio(end)~=barra
-       directorio(end+1)=barra;
+   if directorio(end)~=filesep
+       directorio(end+1)=filesep;
    end   
 else
     directorio=datosegm.directorio_videos;
@@ -60,7 +55,7 @@ lista=dir([directorio 'segm*']);
 
 c_platos=0;
 for c=1:length(lista)
-    if lista(c).isdir && ~isempty(dir([directorio lista(c).name '\mancha2pez*.mat']))
+    if lista(c).isdir && ~isempty(dir([directorio lista(c).name filesep 'mancha2pez*.mat']))
         c_platos=c_platos+1;
         datos.nombresplatos{c_platos}=lista(c).name(5:end);
     end
@@ -234,12 +229,6 @@ end
 %% Abre nuevo plato (carga datos)
 function abreplato(uno,dos,h)
 
-if ispc
-    barra='\';
-else
-    barra='/';
-end
-
 datos=guidata(h.figure);
 if isfield(h,'popup_plato') && uno==h.popup_plato
     plato_act=get(uno,'Value');
@@ -255,14 +244,14 @@ else
     plato_act=1;
 end
 
-load([datos.directorio 'segm' datos.nombresplatos{plato_act} '\datosegm.mat'])
+load([datos.directorio 'segm' datos.nombresplatos{plato_act} filesep 'datosegm.mat'])
 if isstruct(variable)
     datosegm=variable;
     clear variable
 else
-    datosegm=load_encrypt([datos.directorio 'segm' datos.nombresplatos{plato_act} '\datosegm.mat'],1);
+    datosegm=load_encrypt([datos.directorio 'segm' datos.nombresplatos{plato_act} filesep 'datosegm.mat'],1);
 end
-datosegm.directorio=[datos.directorio 'segm' datos.nombresplatos{plato_act} barra];
+datosegm.directorio=[datos.directorio 'segm' datos.nombresplatos{plato_act} filesep];
 datosegm.directorio_videos=datos.directorio;
 if ~isfield(datosegm,'extension')
     datosegm.extension='avi';

@@ -12,7 +12,7 @@
 function [mancha2pez,trozo2pez,probtrozos_relac]=probtrozos2identidades(trozos,probtrozos,matriznoson,umbral_probaceptable)
 
 if nargin<4 || isempty(umbral_probaceptable)
-    umbral_probaceptable=0; % Por defecto, no hay umbral.
+    umbral_probaceptable=0.4; % Por defecto, no hay umbral. Daniel, trying 0.4
 end
 
 n_trozos=max(trozos(:));
@@ -65,6 +65,7 @@ mayores=max(probtrozos_relac,[],2);
 trozo2pez=NaN(n_trozos,1);
 probtrozos_relac2=probtrozos_relac;
 % valor=probtrozos_relac(503,4);
+fprintf('Starting Mayores, relational probabilistic calculation.\n')
 
 while any(~isnan(mayores))
     [m,trozo_act]=max(mayores); % Este es el que est� asignado con mayor probabilidad

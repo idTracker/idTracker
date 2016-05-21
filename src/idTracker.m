@@ -136,7 +136,7 @@ try
         end
     end
     
-    if nargin~=1 % Si s�lo hay un argumento de entrada, ser� datosegm
+    if nargin~=1 % Si sólo hay un argumento de entrada, será datosegm
         if nombrearchivo(end-3)=='.'
             extension=nombrearchivo(end-2:end);
             nombrearchivo=nombrearchivo(1:end-4);
@@ -210,8 +210,8 @@ try
         % primerframe_intervalosbuenos=5000; % No se consideran los primeros 5000 frames para las referencias, porque la pared podr�a afectar. Esto es para v�deos de agresi�n.
         datosegm.primerframe_intervalosbuenos=1;
         datosegm.interval=[1 size(datosegm.frame2archivo,1)];
-        % primerframe_intervalosbuenos=24*500; % Para el v�deo con mano y techo de Juli�n
-        % primerframe_intervalosbuenos=20*500; % Para mi v�deo con mano y techo
+        % primerframe_intervalosbuenos=24*500; % Para el vídeo con mano y techo de Juli�n
+        % primerframe_intervalosbuenos=20*500; % Para mi vídeo con mano y techo
         datosegm.nframes_refs=3000;
         datosegm.ratio_bwdist=2;
         % disp('Guarning reduceresol!')
@@ -633,11 +633,12 @@ try
                     end
                 end
                 
+                if ~isfield(datosegm,'stopafterresegmentation') || ~datosegm.stopafterresegmentation
                 %if isfield(datosegm,'stopafterresegmentation') && datosegm.stopafterresegmentation==true
-                    caca
+                    %caca
                 %end
                 
-                if isempty(referencias)
+               if isempty(referencias)
                     if datosegm.n_peces>1 || (isfield(datosegm,'siemprerefs') && datosegm.siemprerefs)
                         % Intervalos v�lidos para las referencias
                         fprintf('Intervalos buenos\n')
@@ -666,24 +667,40 @@ try
                         % Referencias
                         fprintf('Referencias\n')
                         if ~datosegm.reutiliza.References || isempty(dir([datosegm.directorio 'referencias.mat']))
-                            %         [referencias,framesescogidos]=datosegm2referencias(datosegm,intervalosbuenos,nframes_ref);
-                            if datosegm.refsantiguas
-                                [referencias,framesescogidos]=datosegm2referencias_20120724T172537(datosegm,intervalosbuenos,datosegm.nframes_refs);
-                                listamapas=[];
-                            else
-                                datosegm.tiempos.referencias(1)=now;
-                                %                         [referencias,listamapas]=datosegm2referencias_renuevo(datosegm,intervalosbuenos,trozos,conviven,datosegm.nframes_refs,h_panel);
-                                [referencias,listamapas]=datosegm2referencias(datosegm,intervalosbuenos,trozos,datosegm.nframes_refs,h_panel);
-                                datosegm.tiempos.referencias(2)=now;
-                                variable=datosegm;
-                                save([datosegm.directorio 'datosegm.mat'],'variable')
+                            if( ~isfield(datosegm,'manualreferences')) %Daniel
+                                %         [referencias,framesescogidos]=datosegm2referencias(datosegm,intervalosbuenos,nframes_ref);
+                                if datosegm.refsantiguas
+                                    [referencias,framesescogidos]=datosegm2referencias_20120724T172537(datosegm,intervalosbuenos,datosegm.nframes_refs);
+                                    listamapas=[];
+                                else
+                                    datosegm.tiempos.referencias(1)=now;
+                                    %                         [referencias,listamapas]=datosegm2referencias_renuevo(datosegm,intervalosbuenos,trozos,conviven,datosegm.nframes_refs,h_panel);
+                                    [referencias,listamapas]=datosegm2referencias(datosegm,intervalosbuenos,trozos,datosegm.nframes_refs,h_panel);
+                                    datosegm.tiempos.referencias(2)=now;
+                                    variable=datosegm;
+                                    save([datosegm.directorio 'datosegm.mat'],'variable')
+                                end
+                                tic
+                                refs.referencias=referencias;
+                                refs.listamapas=listamapas;
+                                variable=refs;
+                                save([datosegm.directorio 'referencias.mat'],'variable')
+                                datosegm.tiempos.tiempoguardando=datosegm.tiempos.tiempoguardando+toc;
+                            else %Daniel
+                                fprintf('Manual intervalos buenos.\n')
+                                intervalosbuenos=datosegm2intervalosbuenos_manual(datosegm,trozos,solapos,indiv,segmbuena,borde,datosegm.primerframe_intervalosbuenos,1);
+                                variable=intervalosbuenos;
+                                save([datosegm.directorio 'intervalosbuenos.mat'], 'variable');
+                                fprintf('Manual References building.\n')
+                                load([datosegm.directorio  'mancha2pez_manual.mat'])
+                                man2pez=variable;
+                                refs=datosegm2referencias_manual(datosegm,man2pez,datosegm.interval);
+                                variable=refs;
+                                save([datosegm.directorio 'referencias.mat'], 'variable');
+                                referencias=refs.referencias;
+                                listamapas=refs.listamapas;
+                                clear refs
                             end
-                            tic
-                            refs.referencias=referencias;
-                            refs.listamapas=listamapas;
-                            variable=refs;
-                            save([datosegm.directorio 'referencias.mat'],'variable')
-                            datosegm.tiempos.tiempoguardando=datosegm.tiempos.tiempoguardando+toc;
                         else
                             fprintf('Reutiliza referencias.\n')
                             load([datosegm.directorio 'referencias.mat'])
@@ -782,100 +799,126 @@ try
                     end
                     
 %                     fprintf(datosegm.id_log,'%s - Identification done\n',datestr(now,30));
-                    
-                    if datosegm.n_peces>1 || (isfield(datosegm,'siemprerefs') && datosegm.siemprerefs)
-                        clear referencias
-                        set(h_panel.waitTrajectories,'XData',[0 0 .1 .1])
-                        set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(.1)*100)) ' %'])
-                        load([datosegm.directorio 'solapamiento']);     
-                        solapamiento=variable;
-                        set(h_panel.waitTrajectories,'XData',[0 0 .25 .25])
-                        set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(.25)*100)) ' %'])
-                        idtrozos=mancha2id2idtrozos(datosegm,trozos,solapos,mancha2id);
-                        probtrozos=idtrozos2probtrozos(idtrozos);
-                        % idtrozos=trozos2id_trozos(datosegm,trozos,solapos,indvalidos,referencias,[]);
-                        idprobtrozos.idtrozos=idtrozos;
-                        idprobtrozos.probtrozos=probtrozos;
-                        variable=idprobtrozos;
-                        save([datosegm.directorio 'idtrozos.mat'],'variable')
-                        clear idprobtrozos
-                        
-                        set(h_panel.waitTrajectories,'XData',[0 0 .5 .5])
-                        set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(.5)*100)) ' %'])
-                        
-%                         fprintf(datosegm.id_log,'%s - idtrozos done\n',datestr(now,30));
-                        
-                        % logprob_idtrozos=trozosprobid2idtrozos(trozos,prob_id);
-                        % [mancha2pez,trozo2pez,prob_error,logprob_rel]=prob_idtrozos2idtrozos(trozos,logprob_idtrozos);
-                        % matriznoson=trozos2matriznoson(trozos);
-                        % save([datosegm.directorio 'matriznoson.mat'],'matriznoson')
-                        
-                        
-%                         fprintf(datosegm.id_log,'%s - conectanconviven done\n',datestr(now,30));
-% % %                         
-                        % C�lculo del n�mero de peces en cada mancha
-                        % [mancha2indiv,mancha2borde]=datosegm2mancha2indiv(datosegm);
-                        % save([datosegm.directorio 'mancha2indiv.mat'],'mancha2indiv','mancha2borde')
-                        load([datosegm.directorio 'conectanconviven.mat'])
-                        [mancha2pez,trozo2pez,probtrozos_relac]=probtrozos2identidades(trozos,probtrozos,conviven);
-                        % Para tener en cuenta la din�mica, usar esto:
-                        %             [probramificaciones,relevantes]=trozos2probramificaciones(trozos,solapan);
-                        %             matriznoson=(probramificaciones==0 & relevantes)*.9; % Asumo que hay una probabilidad de 0.1 de que haya un error en matriznoson
-                        %             matriznoson(conviven)=1;
-                        %             [mancha2pez,trozo2pez,probtrozos_relac]=probtrozos2identidades(trozos,probtrozos,matriznoson);
-                        
-                        % [mancha2pez,trozo2pez,framesafavor,id_relac]=idtrozos2identidades(trozos,idtrozos,conviven);
-                        man2pez.mancha2pez=mancha2pez;
-                        man2pez.trozo2pez=trozo2pez;
-                        man2pez.probtrozos_relac=probtrozos_relac;
-                        
-                        
-                        %             man2pez.probramificaciones=probramificaciones;
-                        %             man2pez.relevantes=relevantes;
-                        %             man2pez.matriznoson=matriznoson;
-                    else
-                        mancha2pez=mancha2id;
-                        mancha2pez(mancha2pez==0)=NaN;
-%                         trozo2pez=NaN(1,max(trozos(:)));
-%                         trozo2pez(trozos(mancha2pez==1))=1;
-                        man2pez.mancha2pez=mancha2pez;
-%                         man2pez.trozo2pez=trozo2pez;
-                        probtrozos_relac=[];
-                    end
-                    variable=man2pez;
-                    save([datosegm.directorio 'mancha2pez.mat'],'variable')
-                    clear man2pez
-%                     fprintf(datosegm.id_log,'%s - mancha2pez done\n',datestr(now,30));
+                    if(~datosegm.reutiliza.Trajectories)                                     
+                        if datosegm.n_peces>1 || (isfield(datosegm,'siemprerefs') && datosegm.siemprerefs)
+                            clear referencias
+                            %if(isfield()datosegm.reutiliza.Trajectories
+                                set(h_panel.waitTrajectories,'XData',[0 0 .1 .1])
+                                set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(.1)*100)) ' %'])
+                                load([datosegm.directorio 'solapamiento']);     
+                                solapamiento=variable;
+                                set(h_panel.waitTrajectories,'XData',[0 0 .25 .25])
+                                set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(.25)*100)) ' %'])
+                                idtrozos=mancha2id2idtrozos(datosegm,trozos,solapos,mancha2id);
+                                probtrozos=idtrozos2probtrozos(idtrozos);                        
+                                if(isfield(datosegm,'manualreferences'))
+                                    fprintf('Manual references probabilities.\n')
+                                    probtrozos=prob_manual_correction(datosegm,trozos,solapos,probtrozos);
+%                                   probtrozos=prob_corrected;
+                                end
+                                % idtrozos=trozos2id_trozos(datosegm,trozos,solapos,indvalidos,referencias,[]);
+                                idprobtrozos.idtrozos=idtrozos;
+                                idprobtrozos.probtrozos=probtrozos;
+                                variable=idprobtrozos;
+                                save([datosegm.directorio 'idtrozos.mat'],'variable')
+                                clear idprobtrozos
+                            
+                            set(h_panel.waitTrajectories,'XData',[0 0 .5 .5])
+                            set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(.5)*100)) ' %'])
 
-                    set(h_panel.waitTrajectories,'XData',[0 0 .75 .75])
-                    set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(.75)*100)) ' %'])
-                        
-%                     variable=load([datosegm.directorio 'npixelsyotros.mat']);
-%                     mancha2centro=variable.mancha2centro;
-%                     [trajectories,probtrajectories]=mancha2pez2trayectorias(datosegm,mancha2pez,trozos,probtrozos_relac,mancha2centro);
-%                     save([datosegm.directorio 'trajectories.mat'],'trajectories','probtrajectories')
-%                     save([datosegm.directorio_videos 'trajectories.mat'],'trajectories','probtrajectories')
-% %                     trajectories2txt(trajectories,[datosegm.directorio 'trajectories.txt'])
-%                     trajectories2txt(trajectories,[datosegm.directorio_videos 'trajectories.txt'])
-                    
-                    set(h_panel.waitTrajectories,'XData',[0 0 1 1])
-                    set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(1)*100)) ' %'])
-                    
-                    load([datosegm.directorio 'mancha2pez.mat'])
-                    man2pez=variable;
-                    load([datosegm.directorio 'npixelsyotros.mat'])
-                    npixelsyotros=variable;
-                    [trajectories,probtrajectories]=mancha2pez2trayectorias(datosegm,man2pez.mancha2pez,trozos,[],npixelsyotros.mancha2centro);
-                    save([datosegm.directorio 'trajectories.mat'],'trajectories','probtrajectories')
-                    save([datosegm.directorio_videos 'trajectories.mat'],'trajectories','probtrajectories')
-                    trajectories2txt(trajectories,probtrajectories,[datosegm.directorio_videos 'trajectories.txt'])
-                    
+    %                         fprintf(datosegm.id_log,'%s - idtrozos done\n',datestr(now,30));
+
+                            % logprob_idtrozos=trozosprobid2idtrozos(trozos,prob_id);
+                            % [mancha2pez,trozo2pez,prob_error,logprob_rel]=prob_idtrozos2idtrozos(trozos,logprob_idtrozos);
+                            % matriznoson=trozos2matriznoson(trozos);
+                            % save([datosegm.directorio 'matriznoson.mat'],'matriznoson')
+
+
+    %                         fprintf(datosegm.id_log,'%s - conectanconviven done\n',datestr(now,30));
+    % % %                         
+                            % C�lculo del n�mero de peces en cada mancha
+                            % [mancha2indiv,mancha2borde]=datosegm2mancha2indiv(datosegm);
+                            % save([datosegm.directorio 'mancha2indiv.mat'],'mancha2indiv','mancha2borde')
+                            load([datosegm.directorio 'conectanconviven.mat'])
+                            fprintf('probtrozos2identidades.\n')
+                            %ultra slow!
+                            [mancha2pez,trozo2pez,probtrozos_relac]=probtrozos2identidades(trozos,probtrozos,conviven);
+                            %ultra slow!
+                            % Para tener en cuenta la din�mica, usar esto:
+                            %             [probramificaciones,relevantes]=trozos2probramificaciones(trozos,solapan);
+                            %             matriznoson=(probramificaciones==0 & relevantes)*.9; % Asumo que hay una probabilidad de 0.1 de que haya un error en matriznoson
+                            %             matriznoson(conviven)=1;
+                            %             [mancha2pez,trozo2pez,probtrozos_relac]=probtrozos2identidades(trozos,probtrozos,matriznoson);
+
+                            % [mancha2pez,trozo2pez,framesafavor,id_relac]=idtrozos2identidades(trozos,idtrozos,conviven);
+                            man2pez.mancha2pez=mancha2pez;
+                            man2pez.trozo2pez=trozo2pez;
+                            man2pez.probtrozos_relac=probtrozos_relac;
+
+
+                            %             man2pez.probramificaciones=probramificaciones;
+                            %             man2pez.relevantes=relevantes;
+                            %             man2pez.matriznoson=matriznoson;
+                        else
+                            mancha2pez=mancha2id;
+                            mancha2pez(mancha2pez==0)=NaN;
+    %                         trozo2pez=NaN(1,max(trozos(:)));
+    %                         trozo2pez(trozos(mancha2pez==1))=1;
+                            man2pez.mancha2pez=mancha2pez;
+    %                         man2pez.trozo2pez=trozo2pez;
+                            probtrozos_relac=[];
+                        end
+                        variable=man2pez;
+                        save([datosegm.directorio 'mancha2pez.mat'],'variable')
+                        clear man2pez
+    %                     fprintf(datosegm.id_log,'%s - mancha2pez done\n',datestr(now,30));
+
+                        set(h_panel.waitTrajectories,'XData',[0 0 .75 .75])
+                        set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(.75)*100)) ' %'])
+
+    %                     variable=load([datosegm.directorio 'npixelsyotros.mat']);
+    %                     mancha2centro=variable.mancha2centro;
+    %                     [trajectories,probtrajectories]=mancha2pez2trayectorias(datosegm,mancha2pez,trozos,probtrozos_relac,mancha2centro);
+    %                     save([datosegm.directorio 'trajectories.mat'],'trajectories','probtrajectories')
+    %                     save([datosegm.directorio_videos 'trajectories.mat'],'trajectories','probtrajectories')
+    % %                     trajectories2txt(trajectories,[datosegm.directorio 'trajectories.txt'])
+    %                     trajectories2txt(trajectories,[datosegm.directorio_videos 'trajectories.txt'])
+
+                        set(h_panel.waitTrajectories,'XData',[0 0 1 1])
+                        set(h_panel.textowaitTrajectories,'String',[num2str(round(sum(1)*100)) ' %'])
+
+                        load([datosegm.directorio 'mancha2pez.mat'])
+                        man2pez=variable;
+                        load([datosegm.directorio 'npixelsyotros.mat'])
+                        npixelsyotros=variable;
+                        [trajectories,probtrajectories]=mancha2pez2trayectorias(datosegm,man2pez.mancha2pez,trozos,[],npixelsyotros.mancha2centro);
+                        save([datosegm.directorio 'trajectories.mat'],'trajectories','probtrajectories')
+                        save([datosegm.directorio_videos 'trajectories.mat'],'trajectories','probtrajectories')
+                        trajectories2txt(trajectories,probtrajectories,[datosegm.directorio_videos 'trajectories.txt'])
+                    else                                       
+                         %caca
+                         %load(
+                         fprintf('Reutilize Trajectories.\n')
+                         load([datosegm.directorio 'idtrozos.mat']);
+                         probtrozos=variable.probtrozos;
+                         idtrozos=variable.idtrozos;
+                         load([datosegm.directorio 'solapamiento']);
+                         solapamiento=variable;
+                         load([datosegm.directorio 'conectanconviven.mat'])
+                         load([datosegm.directorio 'mancha2pez.mat'])
+                         man2pez=variable;
+                         load([datosegm.directorio 'npixelsyotros.mat'])
+                         npixelsyotros=variable;
+                         load([datosegm.directorio 'trajectories.mat'])                       
+                    end
                     
                     datosegm.tiempos.fillgaps(1)=now;
                     if datosegm.n_peces>1
+                        fprintf('Auto correct.\n')
                         datosegm2smartinterp2(datosegm,h_panel);
                         load([datosegm.directorio 'mancha2pez_nogaps.mat'])          
                         man2pez=variable;
+                        
                         [trajectories,probtrajectories]=mancha2pez2trayectorias(datosegm,man2pez.mancha2pez,trozos,man2pez.probtrozos_relac,man2pez.mancha2centro);
                         probtrajectories(man2pez.tiporefit==1)=-1;
                         probtrajectories(man2pez.tiporefit>=2)=-2;
@@ -905,8 +948,9 @@ try
                     if ~isfield(datosegm,'muestrapanel') || datosegm.muestrapanel
                         close(h_panel.fig)
                         despedida(datosegm,trajectories,probtrajectories)
-                    end
+                    end                
                 end % if not soloreferencias
+                end % if not stop after resegmentation
             else
                 datosegm.trueno=2; % Para que s� contin�e la pr�xima vez que se ejecute
                 variable=datosegm;

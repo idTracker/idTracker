@@ -11,6 +11,7 @@ tr=variable;
 load([datosegm.directorio 'intervalosbuenos.mat'])
 ib=variable;
 refs.referencias=cell(1,datosegm.n_peces);
+refs.listamapas=cell(1,datosegm.n_peces);
 trozos_act=tr.trozos(interval(1):interval(2),:);
 trozos_act=unique(trozos_act(:))';
 
@@ -41,6 +42,9 @@ for c_files=1:size(datosegm.archivo2frame,1)
                         try
                             if ~isempty(segm(frame_arch).mapas{mancha(c_frames)})
                                 refs.referencias{pez}(:,:,:,end+1)=segm(frame_arch).mapas{mancha(c_frames)};
+                                refs.listamapas{pez}(1,end+1)=frame(c_frames);
+                                refs.listamapas{pez}(2,end+1)=mancha(c_frames);
+                                %refs.listampas(pez)(:)
                             end
                         catch
                             keyboard
@@ -59,7 +63,8 @@ end % c_files
 tams=cellfun(@(x) size(x,4),refs.referencias);
 for c_peces=1:length(refs.referencias)
     refs.referencias{c_peces}=refs.referencias{c_peces}(:,:,:,equiespaciados(min(tams),tams(c_peces)));
+    refs.listamapas{c_peces} =refs.listamapas{c_peces}(:,equiespaciados(min(tams),tams(c_peces)));
 end
-refs.listamapas=[];
+%refs.listamapas=[];
 disp(['Total numbers of references: ' num2str(tams)])
 disp(['Final number of references: ' num2str(min(tams))])

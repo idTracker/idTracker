@@ -78,7 +78,6 @@ end
 if nargin<2
     obj=[];
 end
-
 medidaPantalla=get(0,'ScreenSize');
 color_fondo=[.8 .8 .8];
 h.figure=figure('Color',color_fondo,'NumberTitle','off');%;('Position', [0 0 medidaPantalla(3) medidaPantalla(4)]);
@@ -648,7 +647,8 @@ elseif estado==0
         
     if strcmpi(get(h.showtray,'Checked'),'on')
         for c_peces=1:datos.datosegm.n_peces
-            set(datos.h.lineas(c_peces),'XData',datos.trajectories(max([1 ind_frame-datos.nframes_linea]):ind_frame,c_peces,1),'YData',datos.trajectories(max([1 ind_frame-datos.nframes_linea]):ind_frame,c_peces,2),'Color',datos.colorines(c_peces+1,:),'LineStyle','-','Marker','none')%'.')
+            set(datos.h.lineas(c_peces),'XData',datos.trajectories(max([1 ind_frame-datos.nframes_linea]):max([ind_frame ind_frame+datos.nframes_linea]),c_peces,1),'YData',datos.trajectories(max([1 ind_frame-datos.nframes_linea]):max([ind_frame ind_frame+datos.nframes_linea]),c_peces,2),'Color',datos.colorines(c_peces+1,:),'LineStyle','-','Marker','none')%'.')
+            %set(datos.h.lineas(c_peces),'XData',datos.trajectories(max([1 ind_frame-datos.nframes_linea]):ind_frame,c_peces,1),'YData',datos.trajectories(max([1 ind_frame-datos.nframes_linea]):ind_frame,c_peces,2),'Color',datos.colorines(c_peces+1,:),'LineStyle','-','Marker','none')%'.')%daniel
         end % c_peces
     elseif isfield(h,'lineas')
         for c_peces=1:datos.datosegm.n_peces
@@ -810,6 +810,7 @@ end %
 function seleccionapez(uno,dos,h)
 datos=guidata(h.figure);
 pos=get(uno,'CurrentPoint');
+datos.Button=get(gcf,'selectiontype'); %Daniel
 % x=round(pos(1,1));
 % y=round(pos(1,2));
 if pos(1,1)>=0 && pos(1,1)<=datos.datosegm.tam(2) && pos(1,2)>=0 && pos(1,2)<=datos.datosegm.tam(1)
@@ -843,9 +844,20 @@ if pos(1,1)>=0 && pos(1,1)<=datos.datosegm.tam(2) && pos(1,2)>=0 && pos(1,2)<=da
         if isfield(datos,'mancha2pez')
             datos.pezseleccionado=datos.mancha2pez(ind_frame,manchabuena);
         end
-        datos.esperandocorreccion=true;
-        title(h.ejes,'Type new identity to correct, or SPACE to divide the fragment')
-        drawnow expose update
+        if(strcmp(datos.Button,'normal')); %Daniel
+            datos.esperandocorreccion=true;
+            title(h.ejes,'Type new identity to correct, or SPACE to divide the fragment')
+            drawnow expose update
+        end
+        if(strcmp(datos.Button,'alt'))
+          guidata(h.figure,datos)
+          pezbueno=datos.LastFish; %Daniel
+          corrige(h,pezbueno)
+          datos=guidata(h.figure);
+          guidata(h.figure,datos)          
+          pintaframe(uno,dos,h)
+        end
+        
     end
     guidata(h.figure,datos)
 end
@@ -941,6 +953,11 @@ else % Correcciones
         pezbueno=' ';
     else
         pezbueno=regexpi(datos.nombrespeces,dos.Character);
+        pezbueno
+        if(strcmp(datos.Button,'normal') && size(pezbueno,1)>0)  % Daniel LastFish
+            datos.LastFish=pezbueno
+            guidata(h.figure,datos)
+        end
     end
     %     switch dos.Character
     %         case {'1','2','3','4','5','6','7','8','9'}

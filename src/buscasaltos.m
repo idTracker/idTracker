@@ -31,7 +31,8 @@ for c_trozos=1:n_trozos
     vel=[vel ; sqrt(diff(x(ind)).^2+diff(y(ind)).^2)];
 end 
 vel=sort(vel);
-umbral_vel=2*vel(round(.99*length(vel)));
+%umbral_vel=2*vel(round(.99*length(vel))); Daniel
+umbral_vel=2.*vel(round(.99*length(vel)));
 n_peces=max(trozo2pez(:));
 
 % Primero calcula velocidades de conexi�n para cada trozo dudoso

@@ -1,23 +1,23 @@
-% 29-Apr-2014 10:23:39 Elimino encriptación
-% 01-Jun-2013 11:19:57 Añado encriptación. Ya no salvo la variable
+% 29-Apr-2014 10:23:39 Elimino encriptaciï¿½n
+% 01-Jun-2013 11:19:57 Aï¿½ado encriptaciï¿½n. Ya no salvo la variable
 % progreso.
-% 08-May-2013 19:10:32 Hago que errores_indiv se guarde también fuera de segm
-% 10-Apr-2013 19:24:33 Arreglo un bug que hacía que fallase cuando había un segm completamente vacío
-% 29-Nov-2012 15:19:47 Corrijo. Antes los frames en los que había n_peces manchas no pasaban a indiv.
+% 08-May-2013 19:10:32 Hago que errores_indiv se guarde tambiï¿½n fuera de segm
+% 10-Apr-2013 19:24:33 Arreglo un bug que hacï¿½a que fallase cuando habï¿½a un segm completamente vacï¿½o
+% 29-Nov-2012 15:19:47 Corrijo. Antes los frames en los que habï¿½a n_peces manchas no pasaban a indiv.
 % 29-Nov-2012 12:47:10 Integro con el panel
-% 23-Nov-2012 15:07:40 Hago que calcule indiv, y que lo guarde automáticamente.
-% 19-Sep-2012 11:37:22 Lo preparo para que refs_indiv esté vacío, que
-% ocurrirá en vídeos de un sólo pez.
+% 23-Nov-2012 15:07:40 Hago que calcule indiv, y que lo guarde automï¿½ticamente.
+% 19-Sep-2012 11:37:22 Lo preparo para que refs_indiv estï¿½ vacï¿½o, que
+% ocurrirï¿½ en vï¿½deos de un sï¿½lo pez.
 % 02-Nov-2011 11:10:56 Corrijo el save, que estaba dentro del if y no
-% debería. Quito el aviso de fallo en el último archivo, porque debió ser
+% deberï¿½a. Quito el aviso de fallo en el ï¿½ltimo archivo, porque debiï¿½ ser
 % por esto.
-% 20-Oct-2011 10:22:24 Añado reutiliza. Corrijo errores.
+% 20-Oct-2011 10:22:24 Aï¿½ado reutiliza. Corrijo errores.
 % 17-Oct-2011 15:54:07 Hago que compare los mapas de muchos en muchos para
-% aprovechar la paralelización. Además hago que reutilice cuando ya se han
+% aprovechar la paralelizaciï¿½n. Ademï¿½s hago que reutilice cuando ya se han
 % hecho las comparaciones antes.
 % APE 06 oct 11
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pï¿½rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cientï¿½ficas
 
 function indiv=datosegm2segm_indiv(datosegm,refs_indiv,handles)
 
@@ -57,10 +57,11 @@ for c_archivos=1:n_archivos
     for c_frames=1:length(segm)
         progreso=progreso+1;
         if ~reutiliza || ~isfield(segm,'indiv') || isempty(segm(c_frames).indiv)
-            if length(segm(c_frames).mapas)==datosegm.n_peces
-                segm(c_frames).errores_indiv=NaN(1,datosegm.n_peces);
-                segm(c_frames).indiv=true(1,datosegm.n_peces);
-            elseif ~isempty(refs_indiv)
+            % Daniel, commented for improving individualization
+            %if length(segm(c_frames).mapas)==datosegm.n_peces             
+            %    segm(c_frames).errores_indiv=NaN(1,datosegm.n_peces);
+            %    segm(c_frames).indiv=true(1,datosegm.n_peces);
+            %elseif ~isempty(refs_indiv)
 %                 segm(frame_arch).errores_indiv=NaN(1,datosegm.n_manchas(c
 %                 _frames));
                 for c_manchas=1:size(segm(c_frames).centros,1)
@@ -73,11 +74,11 @@ for c_archivos=1:n_archivos
                     end
                 end % c_manchas
 %                 segm(frame_arch).indiv=segm(frame_arch).errores_indiv<datosegm.umbral_errorindiv;
-            else
-                segm(c_frames).indiv=false(1,size(segm(c_frames).centros,1));
-                segm(c_frames).errores_indiv=NaN(1,datosegm.n_peces);
-            end
-        end % if no está ya calculado
+%             else
+%                 segm(c_frames).indiv=false(1,size(segm(c_frames).centros,1));
+%                 segm(c_frames).errores_indiv=NaN(1,datosegm.n_peces);
+%             end
+        end % if no estï¿½ ya calculado
     end % c_frames
     n_mapas=c_mapas;
     if n_mapas>0

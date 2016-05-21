@@ -1,37 +1,37 @@
-% 29-Apr-2014 10:35:20 Elimino encriptación
+% 29-Apr-2014 10:35:20 Elimino encriptaciï¿½n
 % 21-Dec-2013 19:36:20 Hago que no guarde nada en segm, para ahorrarme
-% salvarlo cada segm. ATENCIÓN: AHORA menores NO SE GUARDA EN NINGÚN SITIO,
+% salvarlo cada segm. ATENCIï¿½N: AHORA menores NO SE GUARDA EN NINGï¿½N SITIO,
 % NI TAMPOCO LAS MATRICES id
-% 20-Dec-2013 15:19:19 Hago que por defecto no guarde menores_cell. Además
-% hago que no tenga que cargar segm para saber qué frames están ya
+% 20-Dec-2013 15:19:19 Hago que por defecto no guarde menores_cell. Ademï¿½s
+% hago que no tenga que cargar segm para saber quï¿½ frames estï¿½n ya
 % identificados
-% 18-Dec-2013 14:47:24 Meto el número máximo de frames por trozo
-% 05-Sep-2013 21:29:32 Hago que pueda funcionar con vídeos anteriores a la
-% encriptación
-% 01-Jun-2013 11:35:57 Añado encriptación
+% 18-Dec-2013 14:47:24 Meto el nï¿½mero mï¿½ximo de frames por trozo
+% 05-Sep-2013 21:29:32 Hago que pueda funcionar con vï¿½deos anteriores a la
+% encriptaciï¿½n
+% 01-Jun-2013 11:35:57 Aï¿½ado encriptaciï¿½n
 % 08-May-2013 19:01:20 Hago que guarde en un archivo fuera de segm menores e id
 % 23-Apr-2013 12:50:25 Voy a volver a meter el sistema de ahorro de tiempo no identificando todos los frames en trozos largos. Pero como puede ser un infierno, 
 % lo hago en trozos2mancha2id_ahorratiempo
-% 19-Sep-2012 11:40:35 Hago que no realice comparaciones en vídeos de un
+% 19-Sep-2012 11:40:35 Hago que no realice comparaciones en vï¿½deos de un
 % solo pez.
-% 08-May-2012 20:48:04 Corrijo para que no falle cuando sólo haya un pez.
-% Es un parche muy cutre, debería hacerlo mejor para que no haga cálculos a
+% 08-May-2012 20:48:04 Corrijo para que no falle cuando sï¿½lo haya un pez.
+% Es un parche muy cutre, deberï¿½a hacerlo mejor para que no haga cï¿½lculos a
 % lo bobo.
-% 07-Mar-2012 17:57:14 Arreglo bugs que había arreglado en el ordenador de
+% 07-Mar-2012 17:57:14 Arreglo bugs que habï¿½a arreglado en el ordenador de
 % Robert.
 % APE 24 feb 12 Viene de trozos2id_trozos
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pï¿½rez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Cientï¿½ficas
 
-% ATENCIÓN: AHORA NI menores NI LAS MATRICES id SE GUARDAN EN NINGÚN SITIO.
-% EN SU DÍA VALÍAN
+% ATENCIï¿½N: AHORA NI menores NI LAS MATRICES id SE GUARDAN EN NINGï¿½N SITIO.
+% EN SU Dï¿½A VALï¿½AN
 % PARA ESTIMAR LA PROBABILIDAD DE LAS ASIGNACIONES. AHORA NO LOS USO, PERO
-% PODRÍAN SER ÚTILES EN ALGÚN MOMENTO.
+% PODRï¿½AN SER ï¿½TILES EN ALGï¿½N MOMENTO.
 
 function mancha2id=trozos2mancha2id(datosegm,trozos,solapos,indvalidos,referencias,difminima,quitaborde,h_panel)
 
 if nargin<6 || isempty(difminima)
-    difminima=20; % Es el mínimo número de frames independientes que tiene que haber entre el ganador y el segundo para considerar que la identificación es segura.
+    difminima=20; % Es el mï¿½nimo nï¿½mero de frames independientes que tiene que haber entre el ganador y el segundo para considerar que la identificaciï¿½n es segura.
 end
 
 if nargin<7 || isempty(quitaborde)
@@ -62,8 +62,17 @@ else
     identificados=false(size(trozos));
 end
 
+
+if(isfield(datosegm,'manualreferences'))
+    load([datosegm.directorio 'mancha2pez_manual.mat'])
+    mancha2id=variable.mancha2pez;
+    mancha2id(isnan(mancha2id))=0;
+    identificados=mancha2id>0;
+end
+
+
 n_trozos=max(trozos(:));
-% Selecciona los frames de cada trozo que identificará
+% Selecciona los frames de cada trozo que identificarï¿½
 if ~isfield(datosegm,'max_framesportrozo') || isempty(datosegm.max_framesportrozo)
     datosegm.max_framesportrozo=Inf;
 end
@@ -114,7 +123,7 @@ trozosquedan_ant=trozostotales;
 n_frames=size(datosegm.frame2archivo,1);
 menores_cell=cell(size(trozos,1),1);
 id_cell=cell(size(trozos,1),1);
-% Si sólo hay un pez, evito que haga las comparaciones
+% Si sï¿½lo hay un pez, evito que haga las comparaciones
 if datosegm.n_peces==1
     vueltas=2;
 else
@@ -131,14 +140,14 @@ for c_archivos=1:n_archivos
         for c_frames=1:nframes_act
             for c_manchas=find(faltanporidentificar(datosegm.archivo2frame(c_archivos,c_frames),:));
                 %                 if identificables(datosegm.archivo2frame(c_archivos,c_frames),c_manchas) && ~identificados(datosegm.archivo2frame(c_archivos,c_frames),c_manchas)
-                if ~archivoabierto % Lo abro aquí dentro para que sólo se abra si hace falta.
+                if ~archivoabierto % Lo abro aquï¿½ dentro para que sï¿½lo se abra si hace falta.
                     if isfield(datosegm,'encriptar')
                         load([datosegm.directorio datosegm.raizarchivo '_' num2str(c_archivos)])
                         segm=variable;
                     else
                         load([datosegm.directorio datosegm.raizarchivo '_' num2str(c_archivos)]);
                     end
-                    if ~isfield(segm,'identificado') % Mantengo esto para que funcione el código más adelante, pero no se guardará (porque no guardo segm)
+                    if ~isfield(segm,'identificado') % Mantengo esto para que funcione el cï¿½digo mï¿½s adelante, pero no se guardarï¿½ (porque no guardo segm)
                         segm(1).identificado=[];
                     end
                     archivoabierto=true;
@@ -150,11 +159,11 @@ for c_archivos=1:n_archivos
 %                     if ~isfield(segm,'menores') || isempty(segm(c_frames).menores)
 %                         segm(c_frames).menores=cell(1,length(segm(c_frames).mapas));
 %                     end
-                    if ~isfield(segm,'id') || isempty(segm(c_frames).id) % Mantengo esto para que funcione el código más adelante, pero no se guardará (porque no guardo segm)
+                    if ~isfield(segm,'id') || isempty(segm(c_frames).id) % Mantengo esto para que funcione el cï¿½digo mï¿½s adelante, pero no se guardarï¿½ (porque no guardo segm)
                         segm(c_frames).id=zeros(length(segm(c_frames).mapas),datosegm.n_peces);
                     end
                     if datosegm.n_peces>1
-                        menores_act=squeeze(menores(c_mapas,:,:)); % Cuando hay un solo pez, aquí las dimensiones no quedan como deben.
+                        menores_act=squeeze(menores(c_mapas,:,:)); % Cuando hay un solo pez, aquï¿½ las dimensiones no quedan como deben.
 %                         segm(c_frames).menores{c_manchas}=menores_act;
                         [m,ind]=min(menores_act,[],2);
                     else
@@ -162,20 +171,20 @@ for c_archivos=1:n_archivos
                     end
                     segm(c_frames).id(c_manchas,:)=zeros(1,datosegm.n_peces);
                     for c=1:2
-                        segm(c_frames).id(c_manchas,ind(c))=segm(c_frames).id(c_manchas,ind(c))+.5; % Así quedará un 1 en los que los dos mapas se pongan de acuerdo, y 0.5 si no se ponen de acuerdo
+                        segm(c_frames).id(c_manchas,ind(c))=segm(c_frames).id(c_manchas,ind(c))+.5; % Asï¿½ quedarï¿½ un 1 en los que los dos mapas se pongan de acuerdo, y 0.5 si no se ponen de acuerdo
                     end
-                    segm(c_frames).identificado(c_manchas)=true; % Mantengo esto para que funcione el código más adelante, pero no se guardará (porque no guardo segm)
+                    segm(c_frames).identificado(c_manchas)=true; % Mantengo esto para que funcione el cï¿½digo mï¿½s adelante, pero no se guardarï¿½ (porque no guardo segm)
                 end % if primera vuelta
                 % Ahora mete los resultados en mancha2id.
                 if c_vueltas==2 && length(segm(c_frames).identificado)>=c_manchas && segm(c_frames).identificado(c_manchas)
-                    ind=find(segm(c_frames).id(c_manchas,:)>0); % Lo suyo sería un ==1, pero lo dejo así de momento por compatibilidad con una versión que tenía un bug y ponía doses y treses.
+                    ind=find(segm(c_frames).id(c_manchas,:)>0); % Lo suyo serï¿½a un ==1, pero lo dejo asï¿½ de momento por compatibilidad con una versiï¿½n que tenï¿½a un bug y ponï¿½a doses y treses.
                     if length(ind)==1
                         mancha2id(datosegm.archivo2frame(c_archivos,c_frames),c_manchas)=ind;
-                    end % if identificación correcta
+                    end % if identificaciï¿½n correcta
                     identificados(datosegm.archivo2frame(c_archivos,c_frames),c_manchas)=true;
                 end
                 %                 end % if mancha buena
-                if c_vueltas==2 % Esto no hace falta que se ejecute para cada mancha. Pero no pasa nada, y es más fácil así.
+                if c_vueltas==2 % Esto no hace falta que se ejecute para cada mancha. Pero no pasa nada, y es mï¿½s fï¿½cil asï¿½.
                     if isfield(segm(c_frames),'menores') && isfield(datosegm,'guarda_menorescell') && datosegm.guarda_menorescell
                         menores_cell{datosegm.archivo2frame(c_archivos,c_frames)}=segm(c_frames).menores;
                     end
@@ -226,8 +235,8 @@ if ~isempty(h_panel)
     set(h_panel.textowaitIdentification,'String',[num2str(round(progreso*100)) ' %'])
 end
 
-% % disp('GUARNING!! TAL Y COMO ESTÁ, JAMÁS CALCULA NUEVAS IDENTIFICACIONES!!')
-% while ~isempty(trozosquedan) %&& trozostotales-length(trozosquedan)<800 % HAY QUE QUITAR ESTE LÍMITE DE TROZOS   
+% % disp('GUARNING!! TAL Y COMO ESTï¿½, JAMï¿½S CALCULA NUEVAS IDENTIFICACIONES!!')
+% while ~isempty(trozosquedan) %&& trozostotales-length(trozosquedan)<800 % HAY QUE QUITAR ESTE Lï¿½MITE DE TROZOS   
 %     length(trozosquedan)
 %     c_trozos=0;
 %     c_mapas=0;
@@ -238,7 +247,7 @@ end
 % %         keyboard
 % %     end
 %     trozosquedan_ant=length(trozosquedan);
-%     while c_mapas<n_mapasporvuelta && c_trozos<length(trozosquedan)% && trozostotales-length(trozosquedan)<50 % HAY QUE QUITAR ESTE LÍMITE DE TROZOS % Acumula 1000 mapas para aprovechar la paralelización de comparamapas
+%     while c_mapas<n_mapasporvuelta && c_trozos<length(trozosquedan)% && trozostotales-length(trozosquedan)<50 % HAY QUE QUITAR ESTE Lï¿½MITE DE TROZOS % Acumula 1000 mapas para aprovechar la paralelizaciï¿½n de comparamapas
 % %          trozostotales-length(trozosquedan)
 %         c_trozos=c_trozos+1;
 %         saltatrozo=false;
@@ -250,8 +259,8 @@ end
 %         manchas=manchas(orden);
 %         solapos_act=solapos_act(orden);
 %         nframes_act=length(ind);
-%         % Si el trozo tiene más de 1000 frames, usa los primeros 1000. Que
-%         % ya está bien, y si no va a necesitar cargar demasiados segm a la
+%         % Si el trozo tiene mï¿½s de 1000 frames, usa los primeros 1000. Que
+%         % ya estï¿½ bien, y si no va a necesitar cargar demasiados segm a la
 %         % vez.
 %         if nframes_act>1000
 %             nframes_act=1000;
@@ -302,7 +311,7 @@ end
 %                 n_quedanbuenos=length(quedanbuenos);
 %                 buenos=find(buenos);
 %                 %             n_buenos=length(buenos);
-%                 % Hace la identificación del trozo con las identificaciones que
+%                 % Hace la identificaciï¿½n del trozo con las identificaciones que
 %                 % estuvieran hechas de antes.
 % %                 if trozo_act==203
 % %                     keyboard
@@ -318,7 +327,7 @@ end
 % %                     plot(nposibles,'r')
 % %                     keyboard
 % %                 end
-%                 % Comprueba si el trozo está bien identificado (o todo lo bien que
+%                 % Comprueba si el trozo estï¿½ bien identificado (o todo lo bien que
 %                 % se puede)
 %                 id_sort=sort(idtrozos(trozo_act,:),'descend');
 %                 if ~any(nvistos<maxvistos & nposibles>0) || id_sort(1)-id_sort(2)>=difminima 
@@ -329,7 +338,7 @@ end
 %                     trozos(trozos==trozo_act)=0;
 %                     trozosquedan(trozosquedan==trozo_act)=[];
 %                     c_trozos=c_trozos-1; % Hay que hacer esto porque hemos eliminado un elemento de trozosquedan
-%                     % Va guardando y borrando los archivos que ya no serán necesarios
+%                     % Va guardando y borrando los archivos que ya no serï¿½n necesarios
 %                     frameescoba=find(sum(trozos,2)~=0,1,'first');
 %                     archivoescoba=datosegm.frame2archivo(frameescoba,1);
 %                     for c_archivos=1:archivoescoba-1
@@ -342,11 +351,11 @@ end
 %                         end
 %                     end
 %                 else
-%                     % Si no está bien identificado, coge los mapas para
+%                     % Si no estï¿½ bien identificado, coge los mapas para
 %                     % identificarlo
 %                     %                 if n_buenos>nframes_min
 %                     quedan(trozo_act)=true;
-%                     if max(solapos_act)>difminima % Si hay posibilidad de hacerlo bien, coge un cierto número de frames
+%                     if max(solapos_act)>difminima % Si hay posibilidad de hacerlo bien, coge un cierto nï¿½mero de frames
 %                         indices=equiesprand_solapos(min([n_quedanbuenos nframes_min]),solapos_act(buenos),cogidos(buenos),bienid(buenos));
 %                     else % Si no hay esperanza de hacerlo bien, coge los necesarios para superar el umbral
 %                         indices=equiesprand_solapos(-maxvistos,solapos_act(buenos),cogidos(buenos),bienid(buenos));
@@ -365,8 +374,8 @@ end
 %                     %                 buenos=buenos(indices);
 %                     %                 n_buenos=length(buenos);
 %                     %                 end
-%                     % Va acumulando mapas para calcular los errores. Lo hago así para aprovechar
-%                     % la paralelización de comparamapas.
+%                     % Va acumulando mapas para calcular los errores. Lo hago asï¿½ para aprovechar
+%                     % la paralelizaciï¿½n de comparamapas.
 %                     for c_indices=1:n_indices
 %                         archivo_act=datosegm.frame2archivo(frames(indices(c_indices)),1);
 %                         frame_arch=datosegm.frame2archivo(frames(indices(c_indices)),2);
@@ -390,7 +399,7 @@ end
 %     ultimotrozo=c_trozos;   
 % %     fprintf('Hecho.\n')
 % %     trozosquedan(1:10)
-%     % Hace las identificaciones para cada frame, y vuelve a meter la información en segm
+%     % Hace las identificaciones para cada frame, y vuelve a meter la informaciï¿½n en segm
 %     for c_mapas=1:size(mapas_act,4)
 %         arch=archivoframemancha(c_mapas,1);
 %         fr=archivoframemancha(c_mapas,2);
@@ -406,7 +415,7 @@ end
 %         [m,ind]=min(menores_act,[],2);
 %         for c=1:2
 % %             try                
-%             segmc{arch}(fr).id(manch,ind(c))=segmc{arch}(fr).id(manch,ind(c))+.5; % Así quedará un 1 en los que los dos mapas se pongan de acuerdo, y 0.5 si no se ponen de acuerdo
+%             segmc{arch}(fr).id(manch,ind(c))=segmc{arch}(fr).id(manch,ind(c))+.5; % Asï¿½ quedarï¿½ un 1 en los que los dos mapas se pongan de acuerdo, y 0.5 si no se ponen de acuerdo
 % %             catch
 % %                 keyboard
 % %             end

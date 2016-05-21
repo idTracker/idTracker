@@ -35,7 +35,7 @@
 % 27-Nov-2012 18:36:18 Cambio el formato de reutiliza
 % APE 21 nov 12
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas.
 
 function [datosegm,h]=panel_identitracking(datosegm)
 

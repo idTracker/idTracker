@@ -1,3 +1,5 @@
+% 21-May-2016 11:04:20 I add datosegm.stopafterresegmentation, so that one
+% can stop the process right after resegmentation
 % 21-May-2016 09:58:55 I improve the handling of file separators, using
 % filesep
 % 09-Oct-2015 10:26:14 Nada.
@@ -629,7 +631,7 @@ try
                 end
                 
                 
-                if isempty(referencias)
+                if isempty(referencias) && (~isfield(datosegm,'stopafterresegmentation') || ~datosegm.stopafterresegmentation)
                     if datosegm.n_peces>1 || (isfield(datosegm,'siemprerefs') && datosegm.siemprerefs)
                         % Intervalos válidos para las referencias
                         fprintf('Intervalos buenos\n')
@@ -721,6 +723,10 @@ try
                 % Trozos, probabilidades y trayectorias
                 % solapamiento=datosegm2solapamiento(datosegm);
                 % disp('Guarning, guarning!!')
+                
+                if isfield(datosegm,'stopafterresegmentation') && datosegm.stopafterresegmentation
+                    datosegm.solohastareferencias=true;
+                end 
                 
                 if ~isfield(datosegm,'solohastareferencias') || ~datosegm.solohastareferencias
                     

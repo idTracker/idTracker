@@ -1,3 +1,5 @@
+% 21-May-2016 10:12:27 Improve compatibility with linux and mac, using
+% filesep
 % 21-Jul-2014 22:36:28 Hago que funcione en linux y mac, donde en vez de \
 % se usa /
 % 25-Dec-2013 17:22:50 Quito el último frame, que a veces da problemas (en
@@ -31,16 +33,11 @@ if nargin<4 || isempty(extension)
     extension='*';
 end
 
-if ispc
-    barra='\';
-else
-    barra='/';
+if directorio(end)~=filesep
+    directorio(end+1)=filesep;
 end
-if directorio(end)~=barra
-    directorio(end+1)=barra;
-end
-if directoriodestino(end)~=barra
-    directoriodestino(end+1)=barra;
+if directoriodestino(end)~=filesep
+    directoriodestino(end+1)=filesep;
 end
 c_archivos=1;
 esta=dir([directorio raizarchivo num2str(c_archivos) '.' extension]);

@@ -1,3 +1,7 @@
+% 21-May-2016 11:04:20 I add datosegm.stopafterresegmentation, so that one
+% can stop the process right after resegmentation
+% 21-May-2016 09:58:55 I improve the handling of file separators, using
+% filesep
 % 09-Oct-2015 10:26:14 Nada.
 % 21-Jul-2014 22:38:46 Hago que funcione en mac y linux (/ en vez de \)
 % 15-Jul-2014 18:09:12 Separo las trayectorias en trajectories y
@@ -118,12 +122,6 @@ function datosegm=idTracker(directorio,nombrearchivo,directorio_destino,n_peces,
 encriptar=false;
 existedatosegm=false;
 
-if ispc
-    barra='\';
-else
-    barra='/';
-end
-
 try
     
     if nargin==0
@@ -148,18 +146,18 @@ try
             raizarchivos=nombrearchivo;
         end
         
-        if directorio(end)~=barra
-            directorio(end+1)=barra;
+        if directorio(end)~=filesep
+            directorio(end+1)=filesep;
         end
         
         if nargin<3 || isempty(directorio_destino)
-            directorio_destino=[directorio 'segm\'];
+            directorio_destino=[directorio 'segm' filesep];
         end
         if isempty(dir(directorio_destino))
             mkdir(directorio_destino)
         end
-        if directorio_destino(end)~=barra
-            directorio_destino(end+1)=barra;
+        if directorio_destino(end)~=filesep
+            directorio_destino(end+1)=filesep;
         end
         
         datosegm=directorio2datosegm(directorio,raizarchivos,directorio_destino,extension);
@@ -633,7 +631,7 @@ try
                 end
                 
                 
-                if isempty(referencias)
+                if isempty(referencias) && (~isfield(datosegm,'stopafterresegmentation') || ~datosegm.stopafterresegmentation)
                     if datosegm.n_peces>1 || (isfield(datosegm,'siemprerefs') && datosegm.siemprerefs)
                         % Intervalos válidos para las referencias
                         fprintf('Intervalos buenos\n')
@@ -725,6 +723,10 @@ try
                 % Trozos, probabilidades y trayectorias
                 % solapamiento=datosegm2solapamiento(datosegm);
                 % disp('Guarning, guarning!!')
+                
+                if isfield(datosegm,'stopafterresegmentation') && datosegm.stopafterresegmentation
+                    datosegm.solohastareferencias=true;
+                end 
                 
                 if ~isfield(datosegm,'solohastareferencias') || ~datosegm.solohastareferencias
                     
@@ -938,8 +940,8 @@ catch me
 %                     unidad=pwd;
 %                     unidad=unidad(1);
                     variable=erroraco;
-                    save(['.\idTrackerError' datestr(now,30)],'variable')
-                    errorfile=['.\idTrackerError' datestr(now,30)];
+                    save(['idTrackerError' datestr(now,30)],'variable')
+                    errorfile=['idTrackerError' datestr(now,30)];
                 end
             catch
                 error(sprintf('An error has occured, and idTracker must close.\n\nError log file could not be created (maybe your disk is full?)\n\nPlease, try again and if the error persist report it to bugs.idtracker@gmail.com\n\nSorry for the inconvenience!'))

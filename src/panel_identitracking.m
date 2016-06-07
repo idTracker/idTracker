@@ -1,3 +1,5 @@
+% 07-Jun-2016: Upgrade to Matlab 2016 - keeping compatibility with older
+% versions
 % 21-May-2016 11:20:11 I add "stop after resegmentation" in the "Advanced"
 % menu
 % 21-Jul-2014 22:41:32 / en vez de \
@@ -217,11 +219,11 @@ if str2double(datosegm.MatlabVersion(1))>=9
     h.lineaumbral=line([0.9 1],[1 1]*datosegm.umbral,'Color',color_manchas,'LineWidth',2);
     % h_line_cbar = line([cbarLeft,cbarRight],[0,0],'color','k','linewidth',4);
     % h.lineaumbral=plot(h.colorbar_axes,[h.colorbar.Position(1) h.colorbar.Position(3)],[1 1]*datosegm.umbral,'Color',color_manchas,'LineWidth',2);
-else
-   h.colorbar=colorbar('Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2+ancho_ejes+sep_colorbar 1-margen_vert-alto_ejes ancho_colorbar alto_ejes]);
+else   
+    h.colorbar=colorbar('Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2+ancho_ejes+sep_colorbar 1-margen_vert-alto_ejes ancho_colorbar alto_ejes]);
     ejes_colorbar=axis(h.colorbar);
     hold(h.colorbar,'on')
-    h.lineaumbral=plot(h.colorbar,ejes_colorbar(1:2),[1 1]*datosegm.umbral,'Color',color_manchas,'LineWidth',2); 
+    h.lineaumbral=plot(h.colorbar,ejes_colorbar(1:2),[1 1]*datosegm.umbral,'Color',color_manchas,'LineWidth',2);
 end
 
 h.text_nmanchas=uicontrol('Style','text','Units','normalized','Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2+ancho_edits 1-margen_vert-alto_ejes-sep_vert3-2*alto_textos ancho_nmanchas 2*alto_textos],'String',sprintf('0 animals\ndetected'),'BackgroundColor',color_fondo,'FontSize',tam_letras,'Enable','off','UserData',datosobj_on);
@@ -501,12 +503,13 @@ end
 %     datos.cambios.frame=false; 
     % Cambio el orden de los children del colorbar, para que la línea siempre quede por encima.
     drawnow % Para que se actualicen los handles
-% hijos=get(h.colorbar,'Children');
-% lineaumbral=find(hijos==h.lineaumbral);
-% hijos=hijos([lineaumbral 1:lineaumbral-1 lineaumbral+1:end],1); %Antonio:
-% problem here -> Hijos is empty. This is not necessary anymore.
-% set(h.colorbar,'Children',hijos)
-% end
+    
+    if str2double(datosegm_act.MatlabVersion(1))<9
+        hijos=get(h.colorbar,'Children');
+        lineaumbral=find(hijos==h.lineaumbral);
+        hijos=hijos([lineaumbral 1:lineaumbral-1 lineaumbral+1:end],1); %Antonio: problem here -> Hijos is empty. This is not necessary anymore in our newest version.
+        set(h.colorbar,'Children',hijos)
+    end
 
 % if datos.cambios.segmentacion
     n_manchas=length(datos.segm.pixels);

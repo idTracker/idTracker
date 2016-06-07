@@ -265,7 +265,7 @@ try
         end
         disp('Guarning!')
         
-        if datosegm.MatlabVersion(1)>8
+        if str2double(datosegm.MatlabVersion(1))>=9
             MyPool = parpool();
         else
             if matlabpool('size')==0
@@ -313,13 +313,13 @@ try
             %         %     matlabpool open local 8
             %     end
             
-            if datosegm.MatlabVersion(1)>8
+            if str2double(datosegm.MatlabVersion(1))>=9
                 nprocesadores_abiertos=MyPool.NumWorkers;
             else
                 nprocesadores_abiertos=matlabpool('size');
             end
             if nprocesadores_abiertos~=datosegm.n_procesadores && (datosegm.n_procesadores~=Inf || nprocesadores_abiertos~=feature('numCores'))
-                if datosegm.MatlabVersion(1)>8
+                if str2double(datosegm.MatlabVersion(1))>=9
                     if nprocesadores_abiertos~=0
                             delete(MyPool)
                     end
@@ -340,7 +340,7 @@ try
                 end
             end
             
-            if datosegm.MatlabVersion(1)>8
+            if str2double(datosegm.MatlabVersion(1))>=9
                 datosegm.n_procesadores_real=MyPool.NumWorkers;
             else
                 datosegm.n_procesadores_real=matlabpool('size');
@@ -925,7 +925,7 @@ try
                     save([datosegm.directorio 'datosegm.mat'],'variable')
 %                     fprintf(datosegm.id_log,'%s - Fin.\n',datestr(now,30));
                     %         msgbox(sprintf('Tracking finished! :-)\n\nThe results are in the files named ''trajectories''\nin folder %s',datosegm.directorio),'Job done')
-                    if datosegm.MatlabVersion(1)>8
+                    if str2double(datosegm.MatlabVersion(1))>=9
                         try
                             if MyPool.NumWorkers>0
                                 delete(MyPool)
@@ -957,7 +957,7 @@ try
 %         fclose(datosegm.id_log);
     end % if no saltatodo (por solodatosegm)
 catch me
-    if datosegm.MatlabVersion(1)>8
+    if str2double(datosegm.MatlabVersion(1))>=9
         try 
             delete(MyPool)
         catch

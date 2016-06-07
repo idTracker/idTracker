@@ -1,3 +1,5 @@
+% 21-May-2016 11:20:11 I add "stop after resegmentation" in the "Advanced"
+% menu
 % 21-Jul-2014 22:41:32 / en vez de \
 % 29-Apr-2014 10:30:41 Elimino la encriptación
 % 07-Apr-2014 10:42:29 Añado la búsqueda de nueva versión
@@ -33,12 +35,12 @@
 % 27-Nov-2012 18:36:18 Cambio el formato de reutiliza
 % APE 21 nov 12
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas.
 
 function [datosegm,h]=panel_identitracking(datosegm)
 
 menuadvanced=~datosegm.encriptar;
-if ~isempty(dir('.\advanced.txt'))
+if ~isempty(dir(['.' filesep 'advanced.txt']))
     menuadvanced=true;
 end
 if ~isfield(datosegm,'mascara')
@@ -214,6 +216,7 @@ if menuadvanced
     h.menu_advanced=uimenu('Label','Advanced','Enable','off','UserData',datosobj_on);
     h.submenu_regionintensity=uimenu(h.menu_advanced,'Label','Select region for intensity reference');
     h.submenu_solohastareferencias=uimenu(h.menu_advanced,'Label','Finish after learning the references');
+    h.submenu_stopafterresegmentation=uimenu(h.menu_advanced,'Label','Finish after resegmentation');
 else
     h.menu_import=-1;
     h.menu_advanced=-1;
@@ -238,6 +241,7 @@ if menuadvanced
     set(h.menu_import,'Callback',@(uno,dos) importaparametros(uno,dos,h))
     set(h.submenu_regionintensity,'Callback',@(uno,dos) cogezona(uno,dos,h))
     set(h.submenu_solohastareferencias,'Callback',@(uno,dos) clic_solohastareferencias(uno,dos,h))
+    set(h.submenu_stopafterresegmentation,'Callback',@(uno,dos) clic_solohastareferencias(uno,dos,h))
     if isfield(datosegm,'solohastareferencias') && datosegm.solohastareferencias
         set(h.submenu_solohastareferencias,'Checked','on')
     end
@@ -303,6 +307,7 @@ datosegm=datos.datosegm;
 datosegm.primerframe_intervalosbuenos=datosegm.interval(1);
 if menuadvanced
     datosegm.solohastareferencias=strcmpi(get(h.submenu_solohastareferencias,'Checked'),'on');
+    datosegm.stopafterresegmentation=strcmpi(get(h.submenu_stopafterresegmentation,'Checked'),'on');
 end
 
 %% Update
@@ -809,22 +814,18 @@ reactiva(0,h)
 datos=guidata(h.fig);
 directorio=ultimodir;
 [nombrearchivo,directorio]=uigetfile('*.avi','Select video file from which tracking parameters are to be borrowed',directorio);
-if ispc
-    barra='\';
-else
-    barra='/';
-end
-if directorio(end)~=barra
-    directorio(end+1)=barra;
+
+if directorio(end)~=filesep
+    directorio(end+1)=filesep;
 end
 ultimodir(directorio);
-if ~isempty(dir([directorio 'segm\datosegm.mat']))
-   load([directorio 'segm\datosegm.mat'])
+if ~isempty(dir([directorio 'segm' filesep 'datosegm.mat']))
+   load([directorio 'segm' filesep 'datosegm.mat'])
    if isstruct(variable)
        datosegm=variable;
        clear variable
    else
-       datosegm=load_encrypt([directorio 'segm\datosegm.mat'],1);
+       datosegm=load_encrypt([directorio 'segm' filesep 'datosegm.mat'],1);
    end
    % Primero los campos que se ven en el panel
    for c_campos=1:length(datos.campos)       

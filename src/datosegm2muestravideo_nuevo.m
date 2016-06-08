@@ -829,7 +829,7 @@ pintaframe([],[],h)
 function correr(uno,dos,h)
 corriendo=~get(h.corriendo,'XData'); % Este controla si está corriendo
 % corriendo
-set(h.corriendo,'XData',corriendo)
+set(h.corriendo,'XData',double(corriendo))
 set(h.figure, 'CurrentObject',h.figure)
 % datos=guidata(h.figure);
 % datos.corriendo=~datos.corriendo;

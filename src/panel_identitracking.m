@@ -1,3 +1,5 @@
+% 07-Jun-2016: Upgrade to Matlab 2016 - keeping compatibility with older
+% versions
 % 21-May-2016 11:20:11 I add "stop after resegmentation" in the "Advanced"
 % menu
 % 21-Jul-2014 22:41:32 / en vez de \
@@ -35,7 +37,7 @@
 % 27-Nov-2012 18:36:18 Cambio el formato de reutiliza
 % APE 21 nov 12
 
-% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas
+% (C) 2014 Alfonso Pérez Escudero, Gonzalo G. de Polavieja, Consejo Superior de Investigaciones Científicas.
 
 function [datosegm,h]=panel_identitracking(datosegm)
 
@@ -201,10 +203,28 @@ h.lienzo_mascara=image(lienzo,'AlphaData',0);
 % datos.cambios.mascara=true;
 axis image
 colormap gray
-h.colorbar=colorbar('Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2+ancho_ejes+sep_colorbar 1-margen_vert-alto_ejes ancho_colorbar alto_ejes]);
-ejes_colorbar=axis(h.colorbar);
-hold(h.colorbar,'on')
-h.lineaumbral=plot(h.colorbar,ejes_colorbar(1:2),[1 1]*datosegm.umbral,'Color',color_manchas,'LineWidth',2);
+
+if str2double(datosegm.MatlabVersion(1))>=9
+    caxis([0 1])
+    h.colorbar_axes=axes('Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2+ancho_ejes+sep_colorbar 1-margen_vert-alto_ejes ancho_colorbar alto_ejes]);
+    h.colorbar = patch(h.colorbar_axes,[0.9 1 1 0.9],[0 0 1 1],[1,1,1],'linewidth',3);
+    nColors = 30;
+    cbarHeight = 1;
+    cDataList   = linspace(0,1,nColors);
+    cbarSeg     = cbarHeight/nColors;
+    cbarY = [0, 0, cbarSeg,cbarSeg] - cbarHeight+1;
+    for iColor = 0:nColors-1
+        patch([0.9 1 1 0.9],cbarY+iColor*cbarSeg,cDataList(iColor+1),'edgecolor','none')
+    end
+    h.lineaumbral=line([0.9 1],[1 1]*datosegm.umbral,'Color',color_manchas,'LineWidth',2);
+    % h_line_cbar = line([cbarLeft,cbarRight],[0,0],'color','k','linewidth',4);
+    % h.lineaumbral=plot(h.colorbar_axes,[h.colorbar.Position(1) h.colorbar.Position(3)],[1 1]*datosegm.umbral,'Color',color_manchas,'LineWidth',2);
+else   
+    h.colorbar=colorbar('Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2+ancho_ejes+sep_colorbar 1-margen_vert-alto_ejes ancho_colorbar alto_ejes]);
+    ejes_colorbar=axis(h.colorbar);
+    hold(h.colorbar,'on')
+    h.lineaumbral=plot(h.colorbar,ejes_colorbar(1:2),[1 1]*datosegm.umbral,'Color',color_manchas,'LineWidth',2);
+end
 
 h.text_nmanchas=uicontrol('Style','text','Units','normalized','Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2+ancho_edits 1-margen_vert-alto_ejes-sep_vert3-2*alto_textos ancho_nmanchas 2*alto_textos],'String',sprintf('0 animals\ndetected'),'BackgroundColor',color_fondo,'FontSize',tam_letras,'Enable','off','UserData',datosobj_on);
 h.ejes_tams=axes('Position',[margen_horiz+ancho_textos+sep_horiz+ancho_edits+sep_horiz2+ancho_edits+ancho_nmanchas+.01 1-margen_vert-alto_ejes-sep_vert3-alto_ejestams ancho_ejes-ancho_nmanchas-ancho_edits-.01 alto_ejestams],'TickDir','in');%,'FontSize',tam_letras);
@@ -281,7 +301,7 @@ guidata(h.fig,datos);
 % ocupado=zeros(1,8);
 % ocupado(3)=1; % Da paso a clicreutiliza
 % set(h.ocupado,'XData',ocupado); drawnow
-clicreutiliza([],[],h)
+clicreutiliza([],[],h) %Antonio: problem here!!!
 reactiva(1,h)
 % disp('dos')
 % actualiza(NaN,[],h)
@@ -483,11 +503,13 @@ end
 %     datos.cambios.frame=false; 
     % Cambio el orden de los children del colorbar, para que la línea siempre quede por encima.
     drawnow % Para que se actualicen los handles
-hijos=get(h.colorbar,'Children');
-lineaumbral=find(hijos==h.lineaumbral);
-hijos=hijos([lineaumbral 1:lineaumbral-1 lineaumbral+1:end],1);
-set(h.colorbar,'Children',hijos)
-% end
+    
+    if str2double(datosegm_act.MatlabVersion(1))<9
+        hijos=get(h.colorbar,'Children');
+        lineaumbral=find(hijos==h.lineaumbral);
+        hijos=hijos([lineaumbral 1:lineaumbral-1 lineaumbral+1:end],1); %Antonio: problem here -> Hijos is empty. This is not necessary anymore in our newest version.
+        set(h.colorbar,'Children',hijos)
+    end
 
 % if datos.cambios.segmentacion
     n_manchas=length(datos.segm.pixels);

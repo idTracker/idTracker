@@ -1,3 +1,4 @@
+% 1-Jun-2016 14:06:15  Upgrade to Matlab 2016a (Antonio).
 % 21-May-2016 11:04:20 I add datosegm.stopafterresegmentation, so that one
 % can stop the process right after resegmentation
 % 21-May-2016 09:58:55 I improve the handling of file separators, using
@@ -94,7 +95,7 @@
 % 19-May-2012 11:20:21 Hago que pueda reutilizar las refs. individuales.
 % 08-May-2012 19:26:00 Modificaciones menores.
 % 13-Mar-2012 20:10:03 Incluyo la comprobación de número de peces en cada
-% mancha
+% mancha.
 % 08-Mar-2012 21:07:11 Actualizo, metiendo todos los cambios que he metido
 % en identitracking_refsexternas.
 % 22-Feb-2012 19:22:25 Añado la posibilidad de invertir el contraste
@@ -262,10 +263,15 @@ try
         if ~isfield(datosegm,'trueno') || isempty(datosegm.trueno)
             datosegm.trueno=false;
         end
-        disp('Guarning!')        
-        if matlabpool('size')==0
-            matlabpool open
-        end        
+        disp('Guarning!')
+        
+        if str2double(datosegm.MatlabVersion(1))>=9
+            MyPool = parpool();
+        else
+            if matlabpool('size')==0
+                matlabpool open
+            end     
+        end
         if ~isfield(datosegm,'muestrapanel') || datosegm.muestrapanel
             [datosegm,h_panel]=panel_identitracking(datosegm);
         end
@@ -306,18 +312,40 @@ try
             % %                 matlabpool open local 4
             %         %     matlabpool open local 8
             %     end
-            nprocesadores_abiertos=matlabpool('size');
+            
+            if str2double(datosegm.MatlabVersion(1))>=9
+                nprocesadores_abiertos=MyPool.NumWorkers;
+            else
+                nprocesadores_abiertos=matlabpool('size');
+            end
             if nprocesadores_abiertos~=datosegm.n_procesadores && (datosegm.n_procesadores~=Inf || nprocesadores_abiertos~=feature('numCores'))
-                if nprocesadores_abiertos~=0
-                    matlabpool close
-                end
-                if datosegm.n_procesadores==Inf
-                    matlabpool open % Configuración por defecto del ordenador
+                if str2double(datosegm.MatlabVersion(1))>=9
+                    if nprocesadores_abiertos~=0
+                            delete(MyPool)
+                    end
+                    if datosegm.n_procesadores==Inf
+                            MyPool = parpool();
+                    else
+                            MyPool = parpool(datosegm.n_procesadores);
+                    end
                 else
-                    matlabpool('open','local',datosegm.n_procesadores)
+                    if nprocesadores_abiertos~=0
+                        matlabpool close
+                    end
+                    if datosegm.n_procesadores==Inf
+                        matlabpool open % Configuración por defecto del ordenador
+                    else
+                        matlabpool('open','local',datosegm.n_procesadores)
+                    end
                 end
             end
-            datosegm.n_procesadores_real=matlabpool('size');
+            
+            if str2double(datosegm.MatlabVersion(1))>=9
+                datosegm.n_procesadores_real=MyPool.NumWorkers;
+            else
+                datosegm.n_procesadores_real=matlabpool('size');
+            end
+            
             if isfield(h_panel,'n_procesadores') && ishandle(h_panel.n_procesadores)
                 set(h_panel.n_procesadores,'String',num2str(datosegm.n_procesadores_real))
                 drawnow
@@ -897,9 +925,22 @@ try
                     save([datosegm.directorio 'datosegm.mat'],'variable')
 %                     fprintf(datosegm.id_log,'%s - Fin.\n',datestr(now,30));
                     %         msgbox(sprintf('Tracking finished! :-)\n\nThe results are in the files named ''trajectories''\nin folder %s',datosegm.directorio),'Job done')
-                    if matlabpool('size')>0
-                        matlabpool close
+                    if str2double(datosegm.MatlabVersion(1))>=9
+                        try
+                            if MyPool.NumWorkers>0
+                                delete(MyPool)
+                            end
+                        catch
+                        end
+                    else
+                        try
+                            if matlabpool('size')>0
+                                matlabpool close
+                            end
+                        catch
+                        end
                     end
+                    
                     if ~isfield(datosegm,'muestrapanel') || datosegm.muestrapanel
                         close(h_panel.fig)
                         despedida(datosegm,trajectories,probtrajectories)
@@ -916,9 +957,16 @@ try
 %         fclose(datosegm.id_log);
     end % if no saltatodo (por solodatosegm)
 catch me
-    try
-        matlabpool close
-    catch
+    if str2double(datosegm.MatlabVersion(1))>=9
+        try 
+            delete(MyPool)
+        catch
+        end
+    else
+        try
+            matlabpool close
+        catch
+        end
     end
     if nargin==0
         boton='Exit & create error log file';

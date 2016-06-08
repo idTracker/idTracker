@@ -136,31 +136,44 @@ while seguir
                         % Si está solo en una mancha erosionada, y la mancha
                         % erosionada viene de una sola mancha original, lo meto
                         % en todas las manchas del trozo correspondiente
-                        manchaeros=segmeros(c_frames).pez2mancha(c_peces,:)==1;                        
-                        if sum(manchaeros==1) && sum(segmeros(c_frames).pez2mancha(:,manchaeros))==1 && sum(segmeros(c_frames).manchasegm==segmeros(c_frames).manchasegm(manchaeros))==1
-                            trozo=trozos(c_frames,segmeros(c_frames).manchasegm(manchaeros));
-                            ind=find(trozo==trozos);
-                            mancha2pez(ind)=c_peces;
-                            [frame,mancha]=ind2sub(size(trozos),ind);
-                            for c_xy=1:2
-                                a=mancha2centro(:,:,c_xy);
-                                tray(frame,c_peces,c_xy)=a(ind);
-                                tiporefit(frame,c_peces)=1;
-                            end                                                          
-                        else
-                            ind_nuevocentro=sum(mancha2centro(c_frames,:,1)>0)+1;
-                            mancha2pez(c_frames,ind_nuevocentro)=c_peces;
-                            mancha2centro(c_frames,ind_nuevocentro,:)=tray(c_frames,c_peces,:);
-                            if size(trozos,2)<ind_nuevocentro
-                                trozos(1,ind_nuevocentro)=0;
+                        manchaeros=segmeros(c_frames).pez2mancha(c_peces,:)==1;
+                        try
+                            if sum(manchaeros==1) && sum(segmeros(c_frames).pez2mancha(:,manchaeros))==1 && sum(segmeros(c_frames).manchasegm==segmeros(c_frames).manchasegm(manchaeros))==1
+                                trozo=trozos(c_frames,segmeros(c_frames).manchasegm(manchaeros));
+                                ind=find(trozo==trozos);
+                                mancha2pez(ind)=c_peces;
+                                [frame,mancha]=ind2sub(size(trozos),ind);
+                                for c_xy=1:2
+                                    a=mancha2centro(:,:,c_xy);
+                                    tray(frame,c_peces,c_xy)=a(ind);
+                                    tiporefit(frame,c_peces)=1;
+                                end                                                          
+                            else
+                                ind_nuevocentro=sum(mancha2centro(c_frames,:,1)>0)+1;
+                                mancha2pez(c_frames,ind_nuevocentro)=c_peces;
+                                mancha2centro(c_frames,ind_nuevocentro,:)=tray(c_frames,c_peces,:);
+                                if size(trozos,2)<ind_nuevocentro
+                                    trozos(1,ind_nuevocentro)=0;
+                                end
                             end
+                        catch
+                                ind_nuevocentro=sum(mancha2centro(c_frames,:,1)>0)+1;
+                                mancha2pez(c_frames,ind_nuevocentro)=c_peces;
+                                mancha2centro(c_frames,ind_nuevocentro,:)=tray(c_frames,c_peces,:);
+                                if size(trozos,2)<ind_nuevocentro
+                                    trozos(1,ind_nuevocentro)=0;
+                                end
                         end
 %                         if sum(mancha2pez(305,:)==5)>1
 %                             keyboard
 %                         end
                         % Si está solo en una mancha, repite por este lado
-                        if sum(manchaeros==1) && sum(segmeros(c_frames).pez2mancha(:,manchaeros))==1                            
+                        try
+                            if sum(manchaeros==1) && sum(segmeros(c_frames).pez2mancha(:,manchaeros))==1                            
                             repitelado=true;
+                            end
+                        catch
+                                
                         end
                     end
 %                     if mancha2pez(1132,9)==2
